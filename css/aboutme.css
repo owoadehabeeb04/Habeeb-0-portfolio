@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Esteban&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans&display=swap');
+
+:root {
+    --backgroundwhole : #171717;
+    --white : #FFFFFF;
+    --backgroundproject : #303030;
+    --innerbackgroundproject : #4D4D4D;
+    --footertext : #C4C4C4;
+    --backgroundskills : #000000;
+    --backgroundsocials : #252525;
+    --navlinktext : #787878;
+    --backgroundmail : #242424;
+    --backgroundcontactme : #323232;
+  }
+
+  
