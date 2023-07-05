@@ -13,5 +13,53 @@
     --backgroundmail : #242424;
     --backgroundcontactme : #323232;
   }
-
-  
+.header-aboutme {
+  border-radius: 72px;
+border: 3px solid #FFF;
+display: flex;
+justify-content: center ;
+align-items: center;
+width: 10%;
+padding: 0.5em 0em;
+margin-top: 3em;
+margin-left: auto;
+margin-right: auto;
+}
+  .header-aboutme h1{
+    color: #FFF;
+font-size: 16px;
+font-family: DM Sans;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+  }
+.the-writeup {
+  color: #FFF;
+font-size: 25px;
+font-family: DM Sans;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+.the-writeup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.dedicated p {
+  color: #FFF;
+font-size: 20px;
+font-family: DM Sans;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+padding-top: 2em;
+}
+.mywrite-up {
+  display: flex;
+  justify-content: space-around;
+  padding: 6em;
+}.actual-writeup {
+  padding-left: 10em;
+}

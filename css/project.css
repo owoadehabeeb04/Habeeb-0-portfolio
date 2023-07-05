@@ -77,13 +77,14 @@ width: 67% ;
 
 .textproject h1 {
     color: white;
-    font-weight: 900;
+    font-weight: 400;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity 0.5s ease;
+    font-size: 10px;
   }
 .overlay {
     position: absolute;
@@ -113,15 +114,15 @@ width: 67% ;
   }
   .textproject h1 {
     font-family: DM sans;
-font-size: 29px;
+font-size: 15px;
 font-weight: 500;
 line-height: 42px;
 letter-spacing: 0em;
 text-align: center;
 background-color: var(--backgroundproject);
 border: 3px solid var(--white);
-padding: 0.2em 0.2em;
-border-radius: 15px;
+padding: 0.1em 2em;
+border-radius: 10px;
   }
   .project-img:hover .overlay {
     opacity: 1;
