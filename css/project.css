@@ -42,6 +42,8 @@ line-height: normal;
     grid-gap: 5px;
     place-items: center;
     margin-top: 3em;
+    margin-left: 2em;
+    margin-right: 2em;
     }
         
       
@@ -52,7 +54,7 @@ line-height: normal;
         background-color: #eaeaea;
         /* padding: 20px; */
 
-width: 67% ;
+width: 80% ;
 /* width: 350px; */
         /* text-align: center; */
       }
@@ -160,7 +162,7 @@ border: 2px solid #FFF;
 padding: 10px 20px;
 margin-right: 1em;
 margin-top: 1em;
-
+margin-bottom: 1em;
     }
   }
   .title-project {
