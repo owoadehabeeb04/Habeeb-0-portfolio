@@ -170,3 +170,19 @@ background-color: var(--backgroundwhole);
     justify-content: space-around;
     padding: 2em;
 }
+@media (max-width: 1300px) {
+    .innerHero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        padding: 3em;
+    }
+
+}
+@media  (max-width: 1170px) {
+    .innerHero {
+        width: 80%;
+    }
+}

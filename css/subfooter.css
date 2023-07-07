@@ -1,0 +1,36 @@
+.subfooter {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    margin-top: 3em;
+}
+button {
+    cursor: pointer;
+}
+.subfooter h1 {
+    color: #FFF;
+font-family: DM Sans;
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+.subfooter p {
+    color: #C4C4C4;
+font-family: DM Sans;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-top: 1.5em;
+}
+.subfooter a button {
+    background: #FFF;
+    color: black;
+    border: 2px solid white;
+    padding: 16px 32px;
+    margin: 1.5em 0em;
+    font-weight: 700;
+}
