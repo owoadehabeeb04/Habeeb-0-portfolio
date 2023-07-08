@@ -211,3 +211,44 @@ width: 70% ;
     width: 85%;
   }
 } 
+@media (max-width: 860px) {
+  .project1{
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .the-projects {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(200px, 1fr));
+    grid-gap: 5px;
+  }
+  .project1{
+    width: 70%;
+  }
+}
+@media (max-width: 700px) {
+  .project1{
+    width: 90%;
+  }
+}
+@media (max-width: 424px) {
+  .project1{
+    width: 100%;
+  }
+
+}
+@media (max-width: 350px) {
+.web-development {
+  display: flex;
+  flex-direction: column; 
+}
+.web-development h2 {
+  margin-bottom: 0em;
+}
+.textproject h1 {
+  padding: 0.1em 1em;
+}
+.title-project h1 {
+  text-align: center;
+}
+}

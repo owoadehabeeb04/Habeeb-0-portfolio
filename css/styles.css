@@ -32,6 +32,10 @@ box-shadow: 0px 4px 100px 0px rgba(0, 0, 0, 0.25) inset;
 display: flex;
 justify-content: space-between;
 padding: 2em 3.5em;
+position: fixed;
+top: 0;
+position: sticky;
+z-index: 1000;
 }
 
 .name h1 {
@@ -46,7 +50,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 }
-.navlink ul {
+.list {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -55,10 +59,10 @@ align-items: center;
     border-radius: 72px;
     border: 3px solid #FFF;
 }
-.navlink ul li {
+.list li {
     list-style-type: none;
 }
-.navlink ul li a {
+.list li a {
     text-decoration: none;
    
 font-size: 16px;
@@ -79,7 +83,7 @@ padding: 0em 1em;
     padding: 0.5em 2em;
     cursor: pointer;
 }
-.contactme_nav a {
+.contact_me {
     text-decoration: none;
     color: #FFF;
 font-size: 16px;
@@ -87,7 +91,7 @@ font-family: DM Sans;
 font-style: normal;
 font-weight: 500;
 line-height: normal;
-padding-left: 1em;
+
 }
 .activeNav {
     color: var(--white);
@@ -170,6 +174,27 @@ background-color: var(--backgroundwhole);
     justify-content: space-around;
     padding: 2em;
 }
+.contact_me{
+    display: flex;
+    justify-content: center;
+}
+.contact_me img {
+    margin-right: 0.3em;
+}
+.hamburger {
+    justify-self: center;
+    align-self: center;
+    display: none;
+    margin-top: 0.9em;
+}
+.close {
+ 
+    justify-self: center;
+    align-items: center;
+    margin-top: 0.9em;
+    z-index: 1000;
+}
+
 @media (max-width: 1300px) {
     .innerHero {
         display: flex;
@@ -184,5 +209,94 @@ background-color: var(--backgroundwhole);
 @media  (max-width: 1170px) {
     .innerHero {
         width: 80%;
+    }
+}
+
+@media (max-width: 908px) {
+.list {
+    display: none;
+}
+   
+    /* add to ul  */
+    .listed  {
+              display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top:  100%;
+        right: 0px; /* Offscreen initially */
+        width: 100%;
+        height: 36vh;
+        background-color: black;
+        border-radius: 0px;
+        transition: right 0.3s;
+       /* z-index: 100; */
+       color: white;
+       padding: 0em;
+   margin: 0em;
+       display: block;
+       border: 2px solid black;
+    }
+    li {
+        margin: 0em 0em;
+        text-align: center;
+
+
+    }
+    
+   
+    .activeNav {
+        color: white;
+        font-weight: 900;
+    }
+
+    ul li {
+        margin: 3em 0em;
+        border-bottom: 2px solid white;
+    }
+
+  .hamburgeredcontact {
+position: absolute;
+left: 59%;
+top: 40%;
+margin-top: 0.5em;
+padding: 0.5em 0.5em;
+z-index: 10000;
+display: block;
+  }
+  .contactme_nav {
+    display: none;
+  }
+  /* .spanned-contact {
+    display: none;
+  } */
+  .contactme_nav  img {
+    margin-right: 0em;
+}
+
+.hiddened {
+    display: block;
+}
+.hamburger{
+    display: block;
+}
+}
+
+@media (max-width: 860px) {
+.innerHero{
+    width:100%;
+}
+.resume{
+    margin-bottom: 3em;
+}
+}
+@media (max-width: 510px){
+    .introduction p {
+        font-size: 30px;
+        font-weight: 700;
+    }
+    .resume {
+        margin-top: 4em;
     }
 }

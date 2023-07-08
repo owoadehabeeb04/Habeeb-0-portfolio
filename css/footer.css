@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     padding: 3em;
+    flex-wrap: wrap;
 }
 .footer-1 h2 {
     color: #C4C4C4;
@@ -59,4 +60,16 @@ margin-top: 0.3em;
     background: #252525;
     padding: 0.5em;
     margin: 0.5em;
+}
+@media (max-width: 590px) {
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.subfooter h1 {
+    text-align: center;
+}
 }
