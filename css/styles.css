@@ -227,7 +227,7 @@ background-color: var(--backgroundwhole);
         top:  100%;
         right: 0px; /* Offscreen initially */
         width: 100%;
-        height: 36vh;
+        height: 100vh;
         background-color: black;
         border-radius: 0px;
         transition: right 0.3s;
