@@ -9,10 +9,12 @@ hamburger.addEventListener('click', function(){
 close.classList.remove('hidden')
 list.classList.add('listed')
 hamburger.style.opacity = '0'
+
 }))
 close.addEventListener('click', function(){
     list.classList.remove('listed')
     close.classList.add('hidden') 
+   
     hamburger.style.opacity = '1'
 })
 
