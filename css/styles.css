@@ -3,12 +3,12 @@
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans&display=swap');
 
 :root {
-  --backgroundwhole : #171717;
+  --backgroundwhole : #0000;
   --white : #FFFFFF;
   --backgroundproject : #303030;
   --innerbackgroundproject : #4D4D4D;
   --footertext : #C4C4C4;
-  --backgroundskills : #000000;
+  --backgroundskills :  #171717;;
   --backgroundsocials : #252525;
   --navlinktext : #787878;
   --backgroundmail : #242424;
@@ -24,7 +24,7 @@ html {
     scroll-behavior: smooth;
 }
 .whole {
-    background: #171717;
+    background-color: black;
 }
 .navbar {
     background: #171717;
@@ -65,7 +65,7 @@ align-items: center;
 .list li a {
     text-decoration: none;
    
-font-size: 16px;
+font-size: 14px;
 font-family: DM Sans;
 font-style: normal;
 font-weight: 500;
@@ -172,9 +172,10 @@ background-color: var(--backgroundwhole);
     cursor: pointer;
 }
 
+
 /* skills */
 .skills {
-    background-color: var(--backgroundskills);
+    background-color: #171717;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -343,3 +344,19 @@ display: block;
         padding: 1em 1em;
     }
 }
+
+
+/* .resume button::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+  background: #303030;
+    transition: width 0.3s;
+  }
+  
+  .resume button:hover::after {
+    width: 100%;
+  } */
+
+  

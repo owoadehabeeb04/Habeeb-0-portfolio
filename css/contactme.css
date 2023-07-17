@@ -40,7 +40,7 @@ line-height: normal;
   
   textarea {
     resize: none;
-    background-color: var(--backgroundwhole);
+    background-color: black;
    border: 1px solid var(--white);
    border-radius: 20px;
    width: 100%;
@@ -59,7 +59,7 @@ line-height: normal;
   }
   form input {
     border: none;
-    background-color: var(--backgroundwhole);
+    background-color: black;
     border-bottom: 1px solid var(--white);
     width: 100%;
   color: var(--white);
@@ -148,3 +148,7 @@ form input {
     align-items: center;
   }
 }
+/* .menu .list a {
+  display: inline-block;
+  text-decoration: none;
+} */
