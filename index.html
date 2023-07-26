@@ -15,12 +15,15 @@
     <link rel="stylesheet" href="css/contactme.css" />
     <link rel="stylesheet" href="css/subfooter.css" />
     <link rel="stylesheet" href="css/footer.css" />
+
+            <!-- animation aos  -->
+            <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
   </head>
   <body>
     <div class="whole">
       <!-- HEADER -->
 
-      <nav class="navbar">
+      <nav class="navbar" data-aos="fade-up" data-aos-once="true">
         <div class="name">
           <h1>Habeeb O.</h1>
         </div>
@@ -52,7 +55,7 @@
       </nav>
       <!-- HERO -->
 
-      <div class="Hero" id="home">
+      <div class="Hero" id="home" data-aos="fade-down">
         <div class="innerHero">
           <div class="imghero">
             <img
@@ -113,20 +116,20 @@
       </div>
       <!--  skills-->
       <div class="skills">
-        <img src="./habeebdev-portfolio-master/html 1.png" alt="html" />
-        <img src="./habeebdev-portfolio-master/css-3 (1) 1.png" alt="CSS" />
-        <img
+        <img data-aos="zoom-in" src="./habeebdev-portfolio-master/html 1.png" alt="html" />
+        <img data-aos="zoom-in" data-aos-duration="1500" src="./habeebdev-portfolio-master/css-3 (1) 1.png" alt="CSS" />
+        <img data-aos="zoom-in"  data-aos-duration="2000" 
           src="./habeebdev-portfolio-master/bootstrap (1) 1.png"
           alt="bootstrap"
         />
-        <img
+        <img data-aos="zoom-in" data-aos-duration="2500" 
           src="./habeebdev-portfolio-master/java-script (1) 1.png"
           alt="javascript"
         />
-        <img src="./habeebdev-portfolio-master/science 1.png" alt="react" />
+        <img data-aos="zoom-in" data-aos-duration="3000"  src="./habeebdev-portfolio-master/science 1.png" alt="react" />
       </div>
       <!-- projects -->
-      <section class="projects" id="projects">
+      <section class="projects" id="projects" data-aos="fade-down">
         <div class="headerprojects">
           <h1>Projects</h1>
         </div>
@@ -281,13 +284,13 @@
           <h1>About me</h1>
         </div>
         <div class="mywrite-up">
-          <div class="aboutme-picture">
+          <div class="aboutme-picture" data-aos="fade-down">
             <img
               src="./habeebdev-portfolio-master/About me picture.svg"
               alt=""
             />
           </div>
-          <main class="actual-writeup">
+          <main class="actual-writeup" data-aos="fade-up">
             <div class="the-writeup">
               <h1>MEET HABEEB</h1>
               <img src="./habeebdev-portfolio-master/Group 2.svg" alt="" />
@@ -352,7 +355,7 @@
         </div>
       </div>
       <!-- Subfooter -->
-      <div class="subfooter">
+      <div class="subfooter" data-aos="zoom-in">
         <img src="./habeebdev-portfolio-master/13 10.png" alt="" />
         <h1>Got an exciting idea for your next project?</h1>
         <p>Let’s have a chat</p>
@@ -362,7 +365,7 @@
         >
       </div>
       <!-- footer -->
-      <div class="footer">
+      <div class="footer"data-aos="fade-down">
         <div class="footer-1">
           <h1>Habeeb O.</h1>
           <h2>
@@ -456,5 +459,15 @@
       </div>
     </div>
     <script src="script.js"></script>
+    <script src="JS/script.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: false, 
+    delay: 0,
+  
+  });
+</script>
   </body>
 </html>

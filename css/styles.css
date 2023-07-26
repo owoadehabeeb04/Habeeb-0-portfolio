@@ -358,5 +358,9 @@ display: block;
   .resume button:hover::after {
     width: 100%;
   } */
-
+@media (min-width: 945px) {
+    .resume button {
+        margin-bottom: 4em;
+    }
+}
   
