@@ -143,10 +143,16 @@ form input {
    
   }
   .img-contactme {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
   }
+  .CONTACT {
+    margin-top: 1em;
+  }
+}
+textarea {
+  padding: 1em 1em;
 }
 /* .menu .list a {
   display: inline-block;

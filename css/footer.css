@@ -30,6 +30,7 @@ font-weight: 400;
 line-height: normal;
 display: flex;
 align-items: center;
+
 padding-top: 1.5em;
 }
 .footer-1 span{
@@ -71,5 +72,19 @@ margin-top: 0.3em;
 }
 .subfooter h1 {
     text-align: center;
+}
+}
+@media (max-width: 450px) {
+
+.subfooter h1 {
+    text-align: center;
+    font-size: 15px;
+}
+.footer-1 h2 {
+    font-size: 16px;
+}
+.footer-1 p {
+    font-size: 12px;
+    justify-content: center;
 }
 }

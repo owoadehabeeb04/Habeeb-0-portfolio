@@ -241,15 +241,22 @@ width: 70% ;
 
 }
 @media (max-width: 450px) {
-.web-development {
+/* .web-development {
   display: flex;
   flex-direction: column; 
-}
+} */
 
 .textproject h1 {
   padding: 0.1em 1em;
 }
-.title-project h1 {
-  text-align: center;
+
+.project1 h2 {
+  color: #FFF;
+font-family: DM Sans;
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+
 }
 }

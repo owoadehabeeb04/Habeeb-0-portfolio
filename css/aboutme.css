@@ -117,3 +117,25 @@
   width: 90%;
 }
 }
+@media (max-width: 450px) {
+.dedicated p {
+  color: #FFF;
+text-align: center;
+font-family: DM Sans;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.the-writeup h1 {
+  color: #FFF;
+font-family: DM Sans;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+.the-writeup img {
+  width: 30%;
+}
+}
