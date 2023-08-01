@@ -492,4 +492,6 @@ line-height: normal;
         margin-bottom: 4em;
     }
 }
-  
+  a {
+    text-decoration: none;
+  }
