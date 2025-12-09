@@ -181,6 +181,11 @@ background-color: var(--backgroundwhole);
     justify-content: space-around;
     padding: 2em;
 }
+.skills img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
 .contact_me{
     display: flex;
     justify-content: center;

@@ -35,12 +35,61 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 }
-/* the projects */
+
+/* Project Tabs */
+.project-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin-top: 2em;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: transparent;
+    border: 2px solid #FFF;
+    color: #787878;
+    padding: 0.5em 1.5em;
+    border-radius: 40px;
+    font-family: DM Sans;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: #FFF;
+    border-color: #FFF;
+}
+
+.tab-btn.active {
+    background: #FFF;
+    color: #000;
+    border-color: #FFF;
+}
+
+.tab-content {
+    display: none !important;
+}
+
+.tab-content.active {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    grid-gap: 5px;
+    align-items: stretch;
+    margin-top: 3em;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+ /* the projects */
  .the-projects{
     display: grid;
     grid-template-columns: repeat(3, minmax(200px, 1fr));
     grid-gap: 5px;
-    place-items: center;
+    align-items: stretch;
     margin-top: 3em;
     margin-left: 2em;
     margin-right: 2em;
@@ -73,8 +122,9 @@ width: 80% ;
 .project1 {
     border-radius: 40px;
     background: var(--backgroundproject);
-    /* width: 50%; */
-    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .textproject h1 {
@@ -170,6 +220,10 @@ margin-bottom: 1em;
   
   .title-project {
     padding: 1em 1em;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .project-img {
     margin: 1em 1em;
@@ -193,7 +247,8 @@ width: 90% ;
    }
   }
 @media  (max-width: 1170px) {
-.the-projects {
+.the-projects,
+.tab-content.active {
   display: grid;
   grid-template-columns: repeat(2, minmax(200px, 1fr));
   grid-gap: 5px;
@@ -220,7 +275,8 @@ width: 70% ;
   }
 }
 @media (max-width: 700px) {
-  .the-projects {
+  .the-projects,
+  .tab-content.active {
     display: grid;
     grid-template-columns: repeat(1, minmax(200px, 1fr));
     grid-gap: 5px;
@@ -258,5 +314,15 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 
+}
+
+.project-tabs {
+  gap: 0.5em;
+  padding: 0 1em;
+}
+
+.tab-btn {
+  padding: 0.4em 1em;
+  font-size: 12px;
 }
 }
