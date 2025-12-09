@@ -2,7 +2,6 @@
   "buildCommand": null,
   "devCommand": null,
   "installCommand": null,
-  "framework": null,
-  "nodeVersion": "24.x"
+  "framework": null
 }
 
