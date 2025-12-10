@@ -1,0 +1,9 @@
+{
+  "name": "habeeb-portfolio",
+  "version": "1.0.0",
+  "description": "Habeeb Owoade Portfolio Website",
+  "engines": {
+    "node": "24.x"
+  }
+}
+
