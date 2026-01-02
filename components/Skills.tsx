@@ -80,12 +80,14 @@ export default function Skills() {
                       }}
                     >
                       {skill.external ? (
-                        <img
+                        <Image
                           src={skill.src}
                           alt={skill.alt}
                           className={`w-5 h-5 object-contain ${
                             skill.name === 'Express' || skill.name === 'LangChain' ? 'tech-icon-invert' : ''
                           }`}
+                          width={20}
+                          height={20}
                           loading="lazy"
                         />
                       ) : (

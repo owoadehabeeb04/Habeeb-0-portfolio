@@ -122,12 +122,14 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
                   title={tech.name}
                 >
                   {tech.external ? (
-                    <img
+                    <Image
                       src={tech.src}
                       alt={tech.name}
                       className={`w-full h-full object-contain ${
                         tech.invertDark ? 'tech-icon-invert' : ''
                       }`}
+                      width={20}
+                      height={20}
                     />
                   ) : (
                     <Image
