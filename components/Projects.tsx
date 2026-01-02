@@ -208,7 +208,7 @@ export default function Projects() {
           
           {/* Description */}
           <p className="text-base md:text-lg text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed mb-6">
-            A collection of projects I've built, ranging from AI-powered applications to full-stack web platforms. Each project showcases my expertise in modern web technologies, user experience design, and solving real-world problems through code.
+            A collection of projects I&apos;ve built, ranging from AI-powered applications to full-stack web platforms. Each project showcases my expertise in modern web technologies, user experience design, and solving real-world problems through code.
           </p>
 
           {/* View All Projects Button */}
