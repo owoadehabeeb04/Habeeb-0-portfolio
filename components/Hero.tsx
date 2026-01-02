@@ -73,7 +73,7 @@ export default function Hero() {
         <div className="flex-1 text-center md:text-left order-2 md:order-1">
           <div className="mb-4 md:mb-6">
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-[var(--text-primary)] mb-3 md:mb-4 leading-tight">
-              Hi, I'm{' '}
+              Hi, I&apos;m{' '}
               <span className="inline-block animate-wave">👋</span>
             </h1>
             <div className="h-12 sm:h-16 md:h-20 flex items-center justify-center md:justify-start overflow-hidden">
@@ -89,7 +89,7 @@ export default function Hero() {
           </div>
           
           <p className="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] mb-6 md:mb-8 max-w-2xl mx-auto md:mx-0 leading-relaxed">
-            I'm a full-stack developer who builds scalable web applications and robust backend systems. From crafting intuitive frontends with React and Next.js to designing efficient server architectures, I focus on clean code and practical solutions.
+            I&apos;m a full-stack developer who builds scalable web applications and robust backend systems. From crafting intuitive frontends with React and Next.js to designing efficient server architectures, I focus on clean code and practical solutions.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center md:justify-start">

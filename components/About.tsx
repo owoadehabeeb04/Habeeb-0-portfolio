@@ -171,7 +171,7 @@ export default function About() {
           >
             <div className="space-y-6">
               <p className="text-base md:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed">
-                I'm Habeeb, a software engineer whose journey into coding began at{' '}
+                I&apos;m Habeeb, a software engineer whose journey into coding began at{' '}
                 <span className="text-[var(--text-primary)] font-semibold underline decoration-2 underline-offset-4">
                   17
                 </span>
@@ -183,7 +183,7 @@ export default function About() {
               </p> */}
 
               <p className="text-base md:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed">
-                I completed my SIWES internship at NSIA Insurance Limited Nigeria, where I gained hands-on industry experience and a clearer understanding of how software operates within large organizations. I'm currently in my final year studying Software Engineering, with multiple completed projects and a strong drive to keep learning, building, and refining my craft.
+                I completed my SIWES internship at NSIA Insurance Limited Nigeria, where I gained hands-on industry experience and a clearer understanding of how software operates within large organizations. I&apos;m currently in my final year studying Software Engineering, with multiple completed projects and a strong drive to keep learning, building, and refining my craft.
               </p>
             </div>
 
@@ -211,7 +211,7 @@ export default function About() {
                     Outside of coding
                   </h3>
                   <p className="text-base md:text-lg text-[var(--text-secondary)] leading-relaxed">
-                  When I'm not coding, I'm usually playing story-driven video games. The way those games handle complex narratives and problem-solving always finds its way back into how I think about building software.                  </p>
+                  When I&apos;m not coding, I&apos;m usually playing story-driven video games. The way those games handle complex narratives and problem-solving always finds its way back into how I think about building software.                  </p>
                 </div>
               </div>
             </div>

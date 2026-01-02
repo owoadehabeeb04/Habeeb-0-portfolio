@@ -107,7 +107,7 @@ export default function Navbar() {
             className="cta-button px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-full text-xs md:text-sm font-medium transition-all duration-300 flex items-center gap-1.5 md:gap-2 whitespace-nowrap shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-110 nav-item-fade"
             style={{ animationDelay: '0.5s' }}
           >
-            Let's work
+            Let&apos;s work
             <svg
               width="14"
               height="14"
