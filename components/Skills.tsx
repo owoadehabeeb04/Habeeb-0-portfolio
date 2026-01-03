@@ -9,15 +9,24 @@ const getSkill = (name: string) => skills.find(s => s.name === name)!
 
 // Categorized skills
 const skillCategories = {
-  Frontend: [
-    'HTML',
-    'CSS',
-    'Tailwind CSS',
+  Languages: [
     'JavaScript',
+    'TypeScript',
+    'Python',
+   
+  ].map(name => getSkill(name)),
+  Frontend: [
+    
+    'HTML',
+    'CSS',    'Tailwind CSS',
+    'shadcn/ui',
     'React',
     'Next.js',
-    'TypeScript',
     'Framer Motion',
+  ].map(name => getSkill(name)),
+  'State Management': [
+    'React Query',
+    'Zustand',
   ].map(name => getSkill(name)),
   Backend: [
     'Node.js',
@@ -32,6 +41,7 @@ const skillCategories = {
     'Prisma',
     'Google Cloud',
     'LangChain',
+    'Vercel',
   ].map(name => getSkill(name)),
 }
 
@@ -40,6 +50,7 @@ export default function Skills() {
 
   return (
     <section
+      id="skills"
       ref={ref}
       className={`py-12 md:py-20 px-4 md:px-8 transition-opacity duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'

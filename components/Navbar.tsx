@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 export default function Navbar() {
@@ -52,7 +53,10 @@ export default function Navbar() {
         } ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
         style={{ transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }}
       >
-        <div className="navbar-container flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] backdrop-blur-md border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 hover:shadow-[var(--border)]/20 transition-all duration-300">
+        <div className="navbar-container flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2.5 md:py-3 
+        bg-gradient-to-r from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] 
+        backdrop-blur-md border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 
+        hover:shadow-[var(--border)]/20 transition-all duration-300">
           <a
             href="#projects"
             onClick={() => handleNavClick('projects')}
@@ -101,11 +105,23 @@ export default function Navbar() {
           >
             Contact
           </a>
-          <span className={`text-[var(--text-secondary)]/30 mx-1 md:mx-2 nav-item-fade`} style={{ animationDelay: '0.45s' }}>|</span>
+          <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.45s' }}>|</span>
+          <Link
+            href="/ask-habeeb"
+            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+              activeNav === 'ask-habeeb' 
+                ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+            }`}
+            style={{ animationDelay: '0.5s' }}
+          >
+            Ask Habeeb AI
+          </Link>
+          <span className={`text-[var(--text-secondary)]/30 mx-1 md:mx-2 nav-item-fade`} style={{ animationDelay: '0.55s' }}>|</span>
           <a
             href="#contact"
             className="cta-button px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-full text-xs md:text-sm font-medium transition-all duration-300 flex items-center gap-1.5 md:gap-2 whitespace-nowrap shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-110 nav-item-fade"
-            style={{ animationDelay: '0.5s' }}
+            style={{ animationDelay: '0.6s' }}
           >
             Let&apos;s work
             <svg
@@ -128,9 +144,28 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Bottom Navigation */}
-      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[var(--bg-secondary)]/95 backdrop-blur-lg border-t border-[var(--border)]/30 shadow-lg ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }}>
+      <nav className={`md:hidden fixed bottom-0 
+        left-0 right-0 z-50 
+           ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }}>
         <div className="flex items-center justify-center px-4 py-3">
-          <div className="navbar-container flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] backdrop-blur-md border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 transition-all duration-300 max-w-full overflow-x-auto scrollbar-hide">
+          <div className="bg-gradient-to-r from-[var(--bg-secondary)] 
+          via-[var(--bg-tertiary)] to-[var(--bg-secondary)] backdrop-blur-md
+          
+          border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 px-3 py-2 max-w-full">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+            <a
+              href="/ask-habeeb"
+              className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${
+                activeNav === 'ask-habeeb' 
+                  ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+              }`}
+              style={{ animationDelay: '0.5s' }}
+            >
+              Ask Habeeb AI
+            </a>
+                          <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.45s' }}>|</span>
+
             <a
               href="#projects"
               onClick={() => handleNavClick('projects')}
@@ -179,6 +214,8 @@ export default function Navbar() {
             >
               Contact
             </a>
+            
+            </div>
           </div>
         </div>
       </nav>

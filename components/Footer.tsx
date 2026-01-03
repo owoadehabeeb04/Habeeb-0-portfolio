@@ -37,7 +37,7 @@ export default function Footer() {
             </svg>
           </a>
           <a
-            href="https://twitter.com/Habeebdev_"
+            href="https://x.com/Drealtemiteee_"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"

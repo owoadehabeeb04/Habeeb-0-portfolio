@@ -1,6 +1,18 @@
 import { Project, Skill, TechStackItem, Experience, Education } from '@/types'
 
 export const skills: Skill[] = [
+  {
+    name: 'Python',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    alt: 'Python',
+    external: true,
+  },
+  {
+    name: 'SQL',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+    alt: 'SQL',
+    external: true,
+  },
   { name: 'HTML', src: '/images/html.png', alt: 'HTML' },
   { name: 'CSS', src: '/images/css.png', alt: 'CSS' },
   {
@@ -94,6 +106,24 @@ export const skills: Skill[] = [
     name: 'LangGraph',
     src: 'https://langchain-ai.github.io/langgraph/img/favicon.ico',
     alt: 'LangGraph',
+    external: true,
+  },
+  {
+    name: 'React Query',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+    alt: 'React Query',
+    external: true,
+  },
+  {
+    name: 'Zustand',
+    src: 'https://avatars.githubusercontent.com/u/44566809?s=200&v=4',
+    alt: 'Zustand',
+    external: true,
+  },
+  {
+    name: 'shadcn/ui',
+    src: 'https://ui.shadcn.com/favicon.ico',
+    alt: 'shadcn/ui',
     external: true,
   },
 ]

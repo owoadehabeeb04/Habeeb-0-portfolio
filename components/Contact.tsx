@@ -60,7 +60,7 @@ export default function Contact() {
           {/* Social Links */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 pt-8">
             <a
-              href="https://twitter.com/Habeebdev_"
+              href="https://x.com/Drealtemiteee_"
               target="_blank"
               rel="noopener noreferrer"
               className="text-base md:text-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300"

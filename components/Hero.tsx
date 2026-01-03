@@ -48,20 +48,20 @@ export default function Hero() {
         
         {/* Geometric Shapes - Hidden on mobile, visible on desktop */}
         <div
-          className="hidden md:block absolute bottom-20 left-10 w-32 h-32 border-2 border-[var(--border)]/50 floating-element"
+          className="hidden md:block absolute bottom-20 left-10 w-32 h-32 border-2 border-[var(--border)]/50 floating-element opacity-20"
           style={{
             clipPath: 'polygon(0% 0%, 100% 0%, 50% 100%)',
             animation: 'float1 12s ease-in-out infinite',
           }}
         />
         <div
-          className="hidden md:block absolute top-32 right-20 w-24 h-24 border-2 border-[var(--border)]/50 floating-element rotate-45"
+          className="hidden md:block absolute top-32 right-20 w-24 h-24 border-2 border-[var(--border)]/50 floating-element rotate-45 opacity-20"
           style={{
             animation: 'float2 10s ease-in-out infinite',
           }}
         />
         <div
-          className="hidden md:block absolute bottom-40 right-10 w-40 h-40 border-2 border-[var(--border)]/50 floating-element rounded-full"
+          className="hidden md:block absolute bottom-40 right-10 w-40 h-40 border-2 border-[var(--border)]/50 floating-element rounded-full opacity-20"
           style={{
             animation: 'float3 15s ease-in-out infinite',
           }}

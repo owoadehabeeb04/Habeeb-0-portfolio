@@ -7,7 +7,6 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { fullstackProjects, frontendProjects } from '@/constants'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
-import ThemeToggle from '@/components/ThemeToggle'
 
 interface ProjectCardProps {
   project: typeof fullstackProjects[0]
@@ -313,9 +312,6 @@ export default function ProjectsPage() {
 
     {/* Footer */}
     <Footer />
-
-    {/* Theme Toggle */}
-    <ThemeToggle />
     </>
   )
 }

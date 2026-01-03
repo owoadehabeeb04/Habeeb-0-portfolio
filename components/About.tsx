@@ -24,7 +24,7 @@ export default function About() {
         {[...Array(12)].map((_, i) => (
           <div
             key={`about-bubble-${i}`}
-            className="absolute rounded-full border border-[var(--border)]/20 floating-element hidden md:block"
+            className="absolute rounded-full border border-[var(--border)]/20 floating-element hidden md:block opacity-30"
             style={{
               width: `${15 + (i % 5) * 8}px`,
               height: `${15 + (i % 5) * 8}px`,
@@ -40,7 +40,7 @@ export default function About() {
         {[...Array(8)].map((_, i) => (
           <div
             key={`about-circle-${i}`}
-            className="absolute rounded-full border-2 border-[var(--border)]/15 floating-element hidden md:block"
+            className="absolute rounded-full border-2 border-[var(--border)]/15 floating-element hidden md:block opacity-25"
             style={{
               width: `${20 + i * 6}px`,
               height: `${20 + i * 6}px`,
@@ -56,7 +56,7 @@ export default function About() {
         {[...Array(10)].map((_, i) => (
           <div
             key={`about-box-${i}`}
-            className="absolute border border-[var(--border)]/20 rounded-sm floating-element rotate-45 hidden md:block"
+            className="absolute border border-[var(--border)]/20 rounded-sm floating-element rotate-45 hidden md:block opacity-30"
             style={{
               width: `${10 + (i % 4) * 5}px`,
               height: `${10 + (i % 4) * 5}px`,
@@ -70,7 +70,7 @@ export default function About() {
         
         {/* Geometric Shapes */}
         <div
-          className="hidden md:block absolute border-2 border-[var(--border)]/15 floating-element"
+          className="hidden md:block absolute border-2 border-[var(--border)]/15 floating-element opacity-25"
           style={{
             width: '24px',
             height: '24px',
@@ -81,7 +81,7 @@ export default function About() {
           }}
         />
         <div
-          className="hidden md:block absolute border-2 border-[var(--border)]/15 floating-element"
+          className="hidden md:block absolute border-2 border-[var(--border)]/15 floating-element opacity-25"
           style={{
             width: '20px',
             height: '20px',
