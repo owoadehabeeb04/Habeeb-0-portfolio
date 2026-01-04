@@ -660,7 +660,7 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
 
       {/* Input Area - Fixed at Bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] ">
-        <div className="max-w-4xl    mx-auto pl-3 pr-16 sm:px-4 py-3 sm:py-4">
+        <div className="max-w-4xl  w-full  mx-auto px-4 py-3 sm:py-4">
           {/* Main Input Container with Send Button Inside */}
           <div className="relative">
             <div className="bg-[var(--bg-secondary)] border border-[var(--border)]/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 focus-within:border-[var(--text-primary)]/40 transition-all duration-300 flex items-end gap-2">
