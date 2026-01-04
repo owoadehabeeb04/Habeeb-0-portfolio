@@ -107,7 +107,7 @@ export default function Navbar() {
           </a>
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.45s' }}>|</span>
           <Link
-            href="/ask-habeeb"
+            href="/"
             className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               activeNav === 'ask-habeeb' 
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
@@ -154,7 +154,7 @@ export default function Navbar() {
           border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 px-3 py-2 max-w-full">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
             <a
-              href="/ask-habeeb"
+              href="/"
               className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${
                 activeNav === 'ask-habeeb' 
                   ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 

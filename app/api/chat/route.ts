@@ -59,8 +59,8 @@ CRITICAL RULES:
 - NEVER create broken or partial links - always include the full URL from the context
 - NEVER say "Unfortunately", "The context does not provide", or "Check his portfolio"
 - You ARE the portfolio - provide direct, detailed answers
-- When mentioning "see all skills" or "full list of technologies", ALWAYS link to: [see his full list of technologies](/#skills)
-- When mentioning "view all projects" or "see his projects", link to: [view his projects](/#projects)
+- When mentioning "see all skills" or "full list of technologies", ALWAYS link to: [see his full list of technologies](/portfolio#skills)
+- When mentioning "view all projects" or "see his projects", link to: [view his projects](/portfolio#projects)
 
 PERSPECTIVE RULES:
 ${isThirdPerson 
@@ -119,6 +119,9 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
     let fullResponse = '' // Collect full response to check for markers
     let streamedResponse = '' // What we've already sent to client
     
+    // Regex to match all marker patterns
+    const markerRegex = /\[SHOW_PROJECTS(:fullstack|:frontend)?\]|\[SHOW_SKILLS\]/g
+    
     const readable = new ReadableStream({
       async start(controller) {
         try {
@@ -147,10 +150,8 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
                 // Stream the new content (excluding any complete markers)
                 let contentToStream = fullResponse.substring(streamedResponse.length)
                 
-                // Remove any complete markers from content to stream
-                for (const marker of markers) {
-                  contentToStream = contentToStream.replace(marker, '')
-                }
+                // Remove all markers using regex
+                contentToStream = contentToStream.replace(markerRegex, '')
                 
                 if (contentToStream) {
                   streamedResponse += contentToStream
@@ -164,22 +165,18 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
           // After streaming is done, check for UI trigger markers and send final cleanup
           let action = undefined
           let filter = 'all'
-          let cleanedMessage = fullResponse
+          let cleanedMessage = fullResponse.replace(markerRegex, '').trim()
           
           if (fullResponse.includes('[SHOW_PROJECTS:fullstack]')) {
             action = 'SHOW_PROJECTS'
             filter = 'fullstack'
-            cleanedMessage = fullResponse.replace('[SHOW_PROJECTS:fullstack]', '').trim()
           } else if (fullResponse.includes('[SHOW_PROJECTS:frontend]')) {
             action = 'SHOW_PROJECTS'
             filter = 'frontend'
-            cleanedMessage = fullResponse.replace('[SHOW_PROJECTS:frontend]', '').trim()
           } else if (fullResponse.includes('[SHOW_PROJECTS]')) {
             action = 'SHOW_PROJECTS'
-            cleanedMessage = fullResponse.replace('[SHOW_PROJECTS]', '').trim()
           } else if (fullResponse.includes('[SHOW_SKILLS]')) {
             action = 'SHOW_SKILLS'
-            cleanedMessage = fullResponse.replace('[SHOW_SKILLS]', '').trim()
           }
           
           // Send any remaining content that wasn't streamed (after removing markers)

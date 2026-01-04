@@ -250,9 +250,9 @@ export default function AskHabeebPage() {
       <div className="sticky top-0 z-40 bg-[var(--bg-primary)] border-b border-[var(--border)]/10">
         <div className="flex items-center p-2 sm:p-3 md:p-4 gap-2 relative">
           <Link
-            href="/"
+            href="/portfolio"
             className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0"
-            aria-label="Back to home"
+            aria-label="View Portfolio"
           >
             <svg
               width="20"
