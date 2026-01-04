@@ -1,5 +1,14 @@
 import { ReactNode } from 'react'
 
+export interface Message {
+  id: string
+  text: string
+  sender: 'user' | 'bot'
+  timestamp: Date
+  action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
+  filter?: 'fullstack' | 'frontend' | 'all'
+}
+
 export interface TechStackItem {
   name: string
   src: string

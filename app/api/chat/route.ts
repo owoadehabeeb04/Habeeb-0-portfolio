@@ -145,8 +145,13 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
                 if (isPartialMarker) break
               }
               
-              // Only stream if we're not potentially building a marker
-              if (!isPartialMarker) {
+              // Also check if we're at the very start and might be building a marker
+              // Don't stream anything until we have at least 30 chars OR we're sure it's not a marker
+              const shouldWaitForMore = fullResponse.length < 30 && 
+                (fullResponse.startsWith('[') || markers.some(m => m.startsWith(fullResponse)))
+              
+              // Only stream if we're not potentially building a marker AND not waiting for more content
+              if (!isPartialMarker && !shouldWaitForMore) {
                 // Stream the new content (excluding any complete markers)
                 let contentToStream = fullResponse.substring(streamedResponse.length)
                 
