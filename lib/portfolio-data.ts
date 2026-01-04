@@ -11,7 +11,7 @@ export const portfolioChunks = [
     - Phone: +234-913-649-7992
     - GitHub: github.com/owoadehabeeb04
     - LinkedIn: linkedin.com/in/owoade-habeeb (also: linkedin.com/in/owoade-habeeb-temitope-a747601b0)
-    - Twitter: twitter.com/Habeebdev_
+    - Twitter: twitter.com/Drealtemiteee_
     - Portfolio: [Portfolio](https://habeeb-dev-portfolio.vercel.app)
     
     He's a full-stack developer who builds scalable web applications and robust backend systems. From crafting intuitive frontends with React and Next.js to designing efficient server architectures, he focuses on clean code and practical solutions.`
