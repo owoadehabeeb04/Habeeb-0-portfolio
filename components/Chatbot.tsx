@@ -298,7 +298,7 @@ export default function Chatbot() {
                 Privacy Policy
               </Link>
               .
-            </p>
+          </p>
           </div>
         </div>
       </div>

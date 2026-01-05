@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Message } from '@/types'
 import ThemeToggle from '@/components/ThemeToggle'
+import Navbar from '@/components/Navbar'
 
 interface ChatbotPageProps {
   homeIcon?: 'home' | 'close'
@@ -243,49 +244,90 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col pb-32">
-      {/* Header - Fixed to top */}
-      <div className="sticky top-0 z-40 bg-[var(--bg-primary)] border-b border-[var(--border)]/10">
-        <div className="flex items-center p-2 sm:p-3 md:p-4 gap-2 relative">
-          <Link
-            href={homeLink}
-            className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0"
-            aria-label={homeIcon === 'home' ? 'View Portfolio' : 'Close'}
+    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col pb-48 sm:pb-52 md:pb-56">
+      {/* Combined sticky container with Navbar and icons */}
+      <div className="sticky top-0 z-50 bg-[var(--bg-primary)] border-b md:border-b-0 border-[var(--border)]/10">
+        <div className="hidden md:flex items-center justify-between px-4 pt-4 pb-2 max-w-[95%] mx-auto">
+          {/* Back Button - Clears conversation */}
+          <button
+            onClick={() => clearMessages()}
+            className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0 text-[var(--text-primary)]"
+            aria-label="Clear conversation"
+            title="Clear conversation"
           >
-            {homeIcon === 'home' ? (
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[var(--text-primary)]"
-              >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-            ) : (
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[var(--text-primary)]"
-              >
-                <line x1="19" y1="5" x2="5" y2="19"></line>
-                <line x1="5" y1="5" x2="19" y2="19"></line>
-              </svg>
-            )}
-          </Link>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
           
-          <h1 className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-base md:text-lg font-semibold text-[var(--text-primary)]">Ask Habeeb AI</h1>
+          {/* Navbar in the center */}
+          <Navbar 
+            navClassName="flex items-center" 
+            navStyle={{}}
+          />
+          
+          {/* Theme Toggle and Clear Button */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {messages.length > 0 && (
+              <button
+                onClick={() => setShowClearDialog(true)}
+                className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                title="Clear chat"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+        
+        {/* Mobile: Full width layout */}
+        <div className="flex md:hidden items-center justify-between p-2 sm:p-3 gap-2">
+          <button
+            onClick={() => clearMessages()}
+            className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0 text-[var(--text-primary)]"
+            aria-label="Clear conversation"
+            title="Clear conversation"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
           
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
@@ -350,6 +392,21 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
       <div className="flex-1 overflow-y-auto flex items-center justify-center">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center w-full px-4 py-8">
+            {/* Hero Picture */}
+            <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 mb-4 sm:mb-6">
+              <div className="absolute inset-0 rounded-full profile-glow"></div>
+              <div className="absolute inset-0 border-2 sm:border-4 border-[var(--border)] rounded-full animate-pulse-slow"></div>
+              <div className="relative w-full h-full rounded-full overflow-hidden border-2 sm:border-4 border-[var(--border)] shadow-2xl">
+                <Image
+                  src="/images/habeebportfolio.jpg"
+                  alt="Habeeb Owoade"
+                  fill
+                  className="object-cover object-[center_0%]"
+                  priority
+                />
+              </div>
+            </div>
+            
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[var(--text-primary)] text-center mb-3">
               👋 Hi! I'm Habeeb's AI Assistant
             </h2>
@@ -629,38 +686,9 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
         )}
       </div>
 
-      {/* Suggestion Chips - Fixed above input area when no messages */}
-      {messages.length === 0 && (
-        <div className="fixed bottom-28 left-0 right-0 z-30 bg-[var(--bg-primary)] pb-2">
-          <div className="max-w-4xl mx-auto px-3 sm:px-4">
-            <div className="overflow-x-auto scrollbar-hide">
-              <div className="flex gap-2 justify-start min-w-max px-1">
-                {[
-                  "Show me your projects",
-                  "What technologies do you work with?",
-                  "Tell me about your experience",
-                  "Can you build an e-commerce app?",
-                  "What's your contact information?",
-                  "Show me your fullstack projects",
-                  "What are your AI/ML skills?"
-                ].map((suggestion, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setInputValue(suggestion)}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text-primary)] rounded-full text-xs sm:text-sm transition-all duration-300 hover:border-[var(--text-primary)] hover:scale-105 whitespace-nowrap flex-shrink-0"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Input Area - Fixed at Bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] ">
-        <div className="max-w-4xl  w-full  mx-auto px-4 py-3 sm:py-4">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] border-t border-[var(--border)]/10">
+        <div className="max-w-4xl w-full mx-auto px-4 py-3 sm:py-4">
           {/* Main Input Container with Send Button Inside */}
           <div className="relative">
             <div className="bg-[var(--bg-secondary)] border border-[var(--border)]/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 focus-within:border-[var(--text-primary)]/40 transition-all duration-300 flex items-end gap-2">
@@ -701,6 +729,29 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
               </button>
+            </div>
+          </div>
+          
+          {/* Persistent Suggestion Chips - Always visible below textarea */}
+          <div className="mt-3 overflow-x-auto scrollbar-hide pb-1">
+            <div className="flex gap-2 justify-start min-w-max">
+              {[
+                "Show me your projects",
+                "What technologies do you work with?",
+                "Tell me about your experience",
+                "Can you build an e-commerce app?",
+                "What's your contact information?",
+                "Show me your fullstack projects",
+                "What are your AI/ML skills?"
+              ].map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => setInputValue(suggestion)}
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text-primary)] rounded-full text-xs sm:text-sm transition-all duration-300 hover:border-[var(--text-primary)] hover:scale-105 whitespace-nowrap flex-shrink-0"
+                >
+                  {suggestion}
+                </button>
+              ))}
             </div>
           </div>
         </div>

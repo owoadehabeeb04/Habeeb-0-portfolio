@@ -3,7 +3,15 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-export default function Navbar() {
+interface NavbarProps {
+  navClassName?: string
+  navStyle?: React.CSSProperties
+}
+
+export default function Navbar({ 
+  navClassName = "hidden md:flex fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300",
+  navStyle = { transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }
+}: NavbarProps) {
   const [activeNav, setActiveNav] = useState('home')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavVisible, setIsNavVisible] = useState(false)
@@ -48,10 +56,10 @@ export default function Navbar() {
     <>
       {/* Desktop Navigation */}
       <nav
-        className={`hidden md:flex fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ${
+        className={`${navClassName} ${
           isScrolled ? 'top-4' : 'top-8'
         } ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
-        style={{ transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }}
+        style={navStyle}
       >
         <div className="navbar-container flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2.5 md:py-3 
         bg-gradient-to-r from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] 
