@@ -269,12 +269,15 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          
           {/* Navbar in the center */}
+          <div className="lg:block hidden">
           <Navbar 
             navClassName="flex items-center" 
             navStyle={{}}
+            showMobileNav={true}
+            mobilePosition="top"
           />
+          </div>
           
           {/* Theme Toggle and Clear Button */}
           <div className="flex items-center gap-2">
@@ -307,7 +310,7 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
         </div>
         
         {/* Mobile: Full width layout */}
-        <div className="flex md:hidden items-center justify-between p-2 sm:p-3 gap-2">
+        <div className="md:hidden flex justify-between items-center  sm:p-3 p-1 ">
           <button
             onClick={() => clearMessages()}
             className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0 text-[var(--text-primary)]"
@@ -328,8 +331,13 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          
-          <div className="ml-auto flex items-center gap-2">
+          <Navbar 
+            navClassName="flex items-center" 
+            navStyle={{}}
+            showMobileNav={true}
+            mobilePosition="top"
+          />
+          <div className=" flex items-center gap-2">
             <ThemeToggle />
             {messages.length > 0 && (
               <button
