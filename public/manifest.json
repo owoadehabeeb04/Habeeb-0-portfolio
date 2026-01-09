@@ -1,0 +1,72 @@
+{
+  "name": "Habeeb Owoade - Full Stack Software Engineer",
+  "short_name": "Habeeb Portfolio",
+  "description": "Full-stack software engineer specializing in React, Next.js, TypeScript, and AI integration. Building scalable web applications.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/habeebportfolio.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/habeebportfolio.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "portfolio",
+    "developer",
+    "software engineering",
+    "web development"
+  ],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "View Portfolio",
+      "short_name": "Portfolio",
+      "description": "View my full portfolio",
+      "url": "/portfolio",
+      "icons": [
+        {
+          "src": "/images/habeebportfolio.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "All Projects",
+      "short_name": "Projects",
+      "description": "Browse all my projects",
+      "url": "/projects",
+      "icons": [
+        {
+          "src": "/images/habeebportfolio.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Ask Habeeb",
+      "short_name": "AI Chat",
+      "description": "Chat with AI assistant",
+      "url": "/ask-habeeb",
+      "icons": [
+        {
+          "src": "/images/habeebportfolio.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
+

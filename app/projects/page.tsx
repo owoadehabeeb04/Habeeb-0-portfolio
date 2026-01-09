@@ -7,6 +7,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { fullstackProjects, frontendProjects } from '@/constants'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import { generateBreadcrumbSchema, siteConfig } from '@/lib/seo'
 
 interface ProjectCardProps {
   project: typeof fullstackProjects[0]
@@ -74,12 +75,14 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
   const descriptionAnimation = contentVisible ? descriptionAnimations[index % descriptionAnimations.length] : ''
 
   return (
-    <div
+    <article
       ref={ref}
       className={`mb-16 md:mb-20 last:mb-0 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       } transition-all duration-700`}
       style={{ transitionDelay: `${index * 150}ms` }}
+      itemScope
+      itemType="https://schema.org/CreativeWork"
     >
       <div className="border border-[var(--border)]/40 rounded-xl md:rounded-2xl overflow-hidden bg-[var(--bg-secondary)]/30 hover:border-[var(--text-primary)] transition-all duration-500 group">
         <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${
@@ -103,6 +106,7 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-700"
                 priority={index < 2}
+                itemProp="image"
               />
             </div>
           </div>
@@ -115,12 +119,18 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
             }`}
           >
             {/* Project Title */}
-            <h3 className={`text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-4 leading-tight ${titleAnimation}`}>
+            <h2 
+              className={`text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-4 leading-tight ${titleAnimation}`}
+              itemProp="name"
+            >
               {project.title}
-            </h3>
+            </h2>
 
             {/* Description */}
-            <p className={`text-base md:text-lg text-[var(--text-secondary)] mb-6 leading-relaxed ${descriptionAnimation}`}>
+            <p 
+              className={`text-base md:text-lg text-[var(--text-secondary)] mb-6 leading-relaxed ${descriptionAnimation}`}
+              itemProp="description"
+            >
               {project.description || project.tags.slice(1).join(' • ')}
             </p>
 
@@ -172,8 +182,9 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-sm md:text-base font-medium hover:opacity-90 transition-all duration-300 hover:scale-105"
+                itemProp="url"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                   <polyline points="15 3 21 3 21 9"></polyline>
                   <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -186,8 +197,9 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[var(--border)] text-[var(--text-primary)] rounded-lg text-sm md:text-base font-medium hover:bg-[var(--bg-secondary)] transition-all duration-300 hover:scale-105"
+                  itemProp="codeRepository"
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                   </svg>
                   View Code
@@ -197,7 +209,7 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
 
@@ -222,97 +234,112 @@ export default function ProjectsPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Breadcrumb Schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Projects', url: '/projects' },
+  ])
+
   return (
     <>
-    <section
-      ref={ref}
-      className={`py-20 md:py-32 px-4 md:px-8 transition-opacity duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <Link 
-            href="/#projects"
-            className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-6"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"></path>
-            </svg>
-            Back to Home
-          </Link>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] mb-4">
-            All Projects
-          </h1>
-          
-          <p className="text-base md:text-lg text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            A complete collection of all my projects, showcasing my work across full-stack and frontend development.
-          </p>
-        </div>
-
-        {/* Projects Grid */}
-        <div key={`page-${currentPage}`}>
-          {currentProjects.map((project, index) => {
-            const isEven = index % 2 === 0
-            const globalIndex = startIndex + index
-            return (
-              <ProjectCard
-                key={`${project.title}-${globalIndex}-${currentPage}`}
-                project={project}
-                index={globalIndex}
-                isEven={isEven}
-              />
-            )
-          })}
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4 mt-12">
-            <button
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 border-2 border-[var(--border)] text-[var(--text-primary)] rounded-lg font-medium hover:bg-[var(--bg-secondary)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      {/* Structured Data - Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      
+      <section
+        ref={ref}
+        className={`py-20 md:py-32 px-4 md:px-8 transition-opacity duration-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <header className="text-center mb-12 md:mb-16">
+            <Link 
+              href="/#projects"
+              className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-6"
             >
-              Previous
-            </button>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+              </svg>
+              Back to Home
+            </Link>
             
-            <div className="flex items-center gap-2">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    currentPage === page
-                      ? 'bg-[var(--text-primary)] text-[var(--bg-primary)]'
-                      : 'border-2 border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] mb-4">
+              All Projects
+            </h1>
             
-            <button
-              onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 border-2 border-[var(--border)] text-[var(--text-primary)] rounded-lg font-medium hover:bg-[var(--bg-secondary)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
+            <p className="text-base md:text-lg text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
+              A complete collection of all my projects, showcasing my work across full-stack and frontend development. Each project demonstrates expertise in modern web technologies and problem-solving.
+            </p>
+          </header>
+
+          {/* Projects Grid */}
+          <div key={`page-${currentPage}`}>
+            {currentProjects.map((project, index) => {
+              const isEven = index % 2 === 0
+              const globalIndex = startIndex + index
+              return (
+                <ProjectCard
+                  key={`${project.title}-${globalIndex}-${currentPage}`}
+                  project={project}
+                  index={globalIndex}
+                  isEven={isEven}
+                />
+              )
+            })}
           </div>
-        )}
-      </div>
-    </section>
 
-    {/* Contact Section */}
-    <Contact />
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <nav className="flex justify-center items-center gap-4 mt-12" aria-label="Projects pagination">
+              <button
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border-2 border-[var(--border)] text-[var(--text-primary)] rounded-lg font-medium hover:bg-[var(--bg-secondary)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Previous page"
+              >
+                Previous
+              </button>
+              
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      currentPage === page
+                        ? 'bg-[var(--text-primary)] text-[var(--bg-primary)]'
+                        : 'border-2 border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
+                    }`}
+                    aria-label={`Page ${page}`}
+                    aria-current={currentPage === page ? 'page' : undefined}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border-2 border-[var(--border)] text-[var(--text-primary)] rounded-lg font-medium hover:bg-[var(--bg-secondary)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Next page"
+              >
+                Next
+              </button>
+            </nav>
+          )}
+        </div>
+      </section>
 
-    {/* Footer */}
-    <Footer />
+      {/* Contact Section */}
+      <Contact />
+
+      {/* Footer */}
+      <Footer />
     </>
   )
 }
-

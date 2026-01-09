@@ -165,15 +165,14 @@ export default function Navbar({
 
       {/* Mobile Bottom Navigation */}
       {showMobileNav && (
-        <nav className={`md:hidden  ${mobilePosition === 'top' ? 'top-0 flex ' : 'bottom-0 fixed'}
+        <nav className={`md:hidden fixed ${mobilePosition === 'top' ? 'top-0' : 'bottom-0'}
         left-0 right-0 z-50 
            ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 ' + (mobilePosition === 'top' ? '-translate-y-4' : 'translate-y-4')}`} style={{ transition: 'opacity 0.6s ease-out, transform 0.6s ease-out' }}>
-        <div className={`flex items-center justify-center ${mobilePosition === 'bottom' && 'px-4 py-3'}`}>
+        <div className={`flex items-center justify-center ${mobilePosition === 'bottom' ? 'px-4 py-3' : 'px-2 py-2'}`}>
           <div className="bg-gradient-to-r from-[var(--bg-secondary)] 
           via-[var(--bg-tertiary)] to-[var(--bg-secondary)] backdrop-blur-md
-          
-          border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 px-3 py-2 max-w-full">
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+          border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 py-2  max-w-full">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide px-3" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
             <a
               href="/"
               className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${

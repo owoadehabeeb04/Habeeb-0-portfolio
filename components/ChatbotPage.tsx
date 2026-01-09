@@ -38,6 +38,7 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
   const [editedText, setEditedText] = useState('')
   const [showClearDialog, setShowClearDialog] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const [mounted, setMounted] = useState(false)
@@ -246,8 +247,8 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col pb-48 sm:pb-52 md:pb-56">
       {/* Combined sticky container with Navbar and icons */}
-      <div className="sticky top-0 z-50 bg-[var(--bg-primary)] border-b md:border-b-0 border-[var(--border)]/10">
-        <div className="hidden md:flex items-center justify-between px-4 pt-4 pb-2 max-w-[95%] mx-auto">
+      <div className="sticky top-0 z-50 bg-[var(--bg-primary)] border-b lg:border-b-0 border-[var(--border)]/10">
+        <div className="hidden lg:flex items-center justify-between px-4 pt-4 pb-2 max-w-[95%] mx-auto">
           {/* Back Button - Clears conversation */}
           <button
             onClick={() => clearMessages()}
@@ -309,8 +310,9 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           </div>
         </div>
         
-        {/* Mobile: Full width layout */}
-        <div className="md:hidden flex justify-between items-center  sm:p-3 p-1 ">
+        {/* Mobile/Tablet: Compact header with hamburger menu */}
+        <div className="lg:hidden flex justify-between items-center sm:p-3 p-2">
+          {/* Left: Back button */}
           <button
             onClick={() => clearMessages()}
             className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex-shrink-0 text-[var(--text-primary)]"
@@ -331,14 +333,34 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          <Navbar 
-            navClassName="flex items-center" 
-            navStyle={{}}
-            showMobileNav={true}
-            mobilePosition="top"
-          />
-          <div className=" flex items-center gap-2">
+
+          {/* Right: Hamburger, Theme toggle and Clear button */}
+          <div className="flex items-center gap-2">
+            {/* Hamburger Menu Button */}
+            <button
+              onClick={() => setShowMobileMenu(true)}
+              className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)]"
+              aria-label="Open menu"
+              title="Menu"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            
             <ThemeToggle />
+            
             {messages.length > 0 && (
               <button
                 onClick={() => setShowClearDialog(true)}
@@ -366,6 +388,125 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           </div>
         </div>
       </div>
+
+      {/* Mobile/Tablet Navigation Menu */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setShowMobileMenu(false)}
+          />
+          
+          {/* Menu Panel */}
+          <div className="absolute top-0 left-0 right-0 bg-[var(--bg-primary)] border-b border-[var(--border)]/20 shadow-2xl animate-in slide-in-from-top duration-300">
+            {/* Menu Header */}
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border)]/10">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Habeeb O.</h2>
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)]"
+                aria-label="Close menu"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="p-4 space-y-2">
+              <Link
+                href="/portfolio#home"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span className="font-medium">Home</span>
+              </Link>
+
+              <Link
+                href="/portfolio#projects"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span className="font-medium">Projects</span>
+              </Link>
+
+              <Link
+                href="/portfolio#about"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="font-medium">About</span>
+              </Link>
+
+              <Link
+                href="/portfolio#experience"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span className="font-medium">Experience</span>
+              </Link>
+
+              <Link
+                href="/portfolio#skills"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                <span className="font-medium">Skills</span>
+              </Link>
+
+              <Link
+                href="/portfolio#contact"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span className="font-medium">Contact</span>
+              </Link>
+
+              {/* Ask Habeeb Link (Current Page) */}
+              <Link
+                href="/"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]/40 text-[var(--text-primary)] group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                <span className="font-medium">Ask Habeeb AI</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* Clear Chat Confirmation Dialog */}
       <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
