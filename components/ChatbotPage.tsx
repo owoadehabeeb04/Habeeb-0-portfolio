@@ -39,12 +39,17 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   const [editedText, setEditedText] = useState('')
   const [showClearDialog, setShowClearDialog] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const [mounted, setMounted] = useState(false)
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text)
+    setCopiedMessageId(messageId)
+    setTimeout(() => {
+      setCopiedMessageId(null)
+    }, 2500) // Show for 2.5 seconds
   }
 
   const formatTime = (date: Date) => {
@@ -73,6 +78,17 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
       removeMessagesAfter(messageId)
       
       setIsTyping(true)
+      
+      // Create placeholder for bot message
+      const botMessageId = (Date.now() + 1).toString()
+      const botMessage: Message = {
+        id: botMessageId,
+        text: '',
+        sender: 'bot',
+        timestamp: new Date(),
+      }
+      addMessage(botMessage)
+      
       try {
         const messageIndex = messages.findIndex(m => m.id === messageId)
         const recentHistory = messages.slice(0, messageIndex).slice(-4).map(msg => ({
@@ -89,19 +105,62 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           }),
         })
 
-        if (response.ok) {
-          const data = await response.json()
-          const botMessage: Message = {
-            id: (Date.now() + 1).toString(),
-            text: data.message,
-            sender: 'bot',
-            timestamp: new Date(),
-          }
-          addMessage(botMessage)
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Failed to get response')
         }
-      } catch (error) {
+
+        // Handle streaming response
+        const reader = response.body?.getReader()
+        const decoder = new TextDecoder()
+        let accumulatedText = ''
+        let detectedAction: 'SHOW_PROJECTS' | 'SHOW_SKILLS' | undefined = undefined
+        let detectedFilter: 'fullstack' | 'frontend' | 'all' = 'all'
+
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            const chunk = decoder.decode(value)
+            const lines = chunk.split('\n')
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6)
+                if (data === '[DONE]') {
+                  setIsTyping(false)
+                  break
+                }
+                try {
+                  const parsed = JSON.parse(data)
+                  
+                  if (parsed.action) {
+                    detectedAction = parsed.action
+                    detectedFilter = parsed.filter || 'all'
+                    
+                    updateMessage(botMessageId, { 
+                      action: detectedAction, 
+                      filter: detectedFilter 
+                    })
+                  } else if (parsed.content) {
+                    accumulatedText += parsed.content
+                    updateMessage(botMessageId, { text: accumulatedText })
+                  }
+                } catch (e) {
+                  // Skip invalid JSON
+                }
+              }
+            }
+          }
+        }
+        
+        setIsTyping(false)
+      } catch (error: any) {
         console.error('Error:', error)
-      } finally {
+        updateMessage(botMessageId, { 
+          text: error.message || 'Sorry, I encountered an error. Please try again.' 
+        })
         setIsTyping(false)
       }
     }
@@ -402,7 +461,7 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           <div className="absolute top-0 left-0 right-0 bg-[var(--bg-primary)] border-b border-[var(--border)]/20 shadow-2xl animate-in slide-in-from-top duration-300">
             {/* Menu Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--border)]/10">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Habeeb O.</h2>
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Navigation</h2>
               <button
                 onClick={() => setShowMobileMenu(false)}
                 className="p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)]"
@@ -794,13 +853,21 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                           {formatTime(message.timestamp)}
                         </span>
                         <button
-                          onClick={() => copyToClipboard(message.text)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-[var(--bg-secondary)] rounded"
-                          title="Copy"
+                          onClick={() => copyToClipboard(message.text, message.id)}
+                          className={`transition-opacity p-1 hover:bg-[var(--bg-secondary)] rounded ${
+                            copiedMessageId === message.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                          }`}
+                          title={copiedMessageId === message.id ? "Copied!" : "Copy"}
                         >
-                          <svg className="w-3 h-3 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
+                          {copiedMessageId === message.id ? (
+                            <svg className="w-3 h-3 text-green-500 animate-in zoom-in duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : (
+                            <svg className="w-3 h-3 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          )}
                         </button>
                         {message.sender === 'user' && (
                           <button
