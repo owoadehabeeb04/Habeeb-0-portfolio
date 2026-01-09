@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { fullstackProjects, frontendProjects } from '@/constants'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://habeebowoade.com'
+  const baseUrl = 'https://habeeb-dev-portfolio.vercel.app'
   const currentDate = new Date()
 
   // Static routes

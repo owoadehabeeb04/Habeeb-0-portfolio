@@ -4,8 +4,8 @@ export const siteConfig = {
   name: 'Habeeb Owoade',
   title: 'Habeeb Owoade - Full Stack Software Engineer | React, Next.js, TypeScript Expert',
   description: 'Full-stack software engineer specializing in React, Next.js, TypeScript, Node.js, and AI integration. Top 1% student at Bowen University (CGPA 4.65/5.00). Building scalable web applications with modern technologies.',
-  url: 'https://habeeb-dev-portfolio.vercel.app/',
-  ogImage: 'https://habeebowoade.com/images/habeebportfolio.jpg',
+  url: 'https://habeeb-dev-portfolio.vercel.app',
+  ogImage: 'https://habeeb-dev-portfolio.vercel.app/images/habeebportfolio.jpg',
   links: {
     twitter: 'https://twitter.com/Drealtemiteee_',
     github: 'https://github.com/owoadehabeeb04',
@@ -39,7 +39,7 @@ export const siteConfig = {
   author: {
     name: 'Habeeb Owoade',
     email: 'owoadehabeeb04@gmail.com',
-    url: 'https://habeebowoade.com',
+    url: 'https://habeeb-dev-portfolio.vercel.app',
   },
 }
 

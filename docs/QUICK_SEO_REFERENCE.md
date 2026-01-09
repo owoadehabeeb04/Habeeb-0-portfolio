@@ -6,7 +6,7 @@ Before deploying, update these in `lib/seo.ts`:
 
 ```typescript
 export const siteConfig = {
-  url: 'https://habeebowoade.com', // ← CHANGE TO YOUR DOMAIN
+  url: 'https://habeeb-dev-portfolio.vercel.app', // ← YOUR CURRENT DOMAIN
   // ... rest stays the same
 }
 ```
