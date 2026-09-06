@@ -106,7 +106,7 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
     ]
 
     const stream = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile', 
+      model: 'openai/gpt-oss-120b',
       messages,
       temperature: 0.7,
       max_tokens: 800, // Increased for detailed responses
