@@ -110,6 +110,19 @@ test.describe('case studies index and navigation', () => {
     expect(href).toBe('/portfolio#contact')
   })
 
+  test('the Ask Habeeb AI phone menu has a Case Studies link', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/ask-habeeb')
+    await page.getByLabel('Open menu').click()
+    await page.getByRole('link', { name: 'Case Studies' }).click()
+    await expect(page).toHaveURL(/\/case-studies$/)
+  })
+
+  test('the /projects page has the navbar with Case Studies', async ({ page }) => {
+    await page.goto('/projects')
+    await expect(page.getByRole('link', { name: 'Case Studies' }).first()).toBeVisible()
+  })
+
   test('/projects shows a Read case study button', async ({ page }) => {
     await page.goto('/projects')
     await expect(page.getByRole('link', { name: 'Read case study' }).first()).toBeVisible()

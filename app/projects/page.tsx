@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { fullstackProjects, frontendProjects } from '@/constants'
+import Navbar from '@/components/Navbar'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import { generateBreadcrumbSchema, siteConfig } from '@/lib/seo'
@@ -259,6 +260,7 @@ export default function ProjectsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <Navbar />
       
       <section
         ref={ref}
