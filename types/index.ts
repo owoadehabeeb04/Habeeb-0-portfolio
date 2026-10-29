@@ -8,6 +8,7 @@ export interface Message {
   action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
   filter?: 'fullstack' | 'frontend' | 'all'
   truncated?: boolean
+  sources?: { title: string; url: string }[]
 }
 
 export interface TechStackItem {

@@ -144,6 +144,8 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           const parsed = JSON.parse(data)
           if (parsed.action) {
             updateMessage(botMessageId, { action: parsed.action, filter: parsed.filter || 'all' })
+          } else if (parsed.sources) {
+            updateMessage(botMessageId, { sources: parsed.sources })
           } else if (parsed.truncated) {
             updateMessage(botMessageId, { truncated: true })
           } else if (parsed.content) {
@@ -675,6 +677,20 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                             >
                               {message.text}
                             </ReactMarkdown>
+
+                            {message.sources && message.sources.length > 0 && (
+                              <div className="mt-3 text-xs text-[var(--text-secondary)]">
+                                <span className="font-medium">Sources: </span>
+                                {message.sources.map((source, i) => (
+                                  <span key={source.url}>
+                                    {i > 0 && ' · '}
+                                    <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--text-primary)]">
+                                      {source.title.length > 40 ? `${source.title.slice(0, 40)}…` : source.title}
+                                    </a>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                             
                             {/* Show Projects UI when action is SHOW_PROJECTS */}
                             {message.action === 'SHOW_PROJECTS' && (

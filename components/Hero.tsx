@@ -94,8 +94,8 @@ export default function Hero() {
           
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center md:justify-start">
             <a
-              href="https://www.dropbox.com/scl/fi/8pwzxju1g5a7z6k6iskgd/OWOADE_HABEEB_RESUME-4.pdf?rlkey=kqagoji9fa7yafe4v0tj5l4oe&st=iptearno&dl=0"
-              download="habeebdev resume"
+              href="/Habeeb-Owoade-CV.pdf"
+              download="Habeeb-Owoade-CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-6 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg font-medium hover:opacity-90 transition-all duration-300 text-center active:scale-95"

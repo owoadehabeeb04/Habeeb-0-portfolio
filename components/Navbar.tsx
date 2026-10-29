@@ -91,7 +91,7 @@ export default function Navbar({
           </a>
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
           <a
-            href="https://www.dropbox.com/scl/fi/8pwzxju1g5a7z6k6iskgd/OWOADE_HABEEB_RESUME-4.pdf?rlkey=kqagoji9fa7yafe4v0tj5l4oe&st=iptearno&dl=0"
+            href="/Habeeb-Owoade-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105 transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade"
@@ -200,7 +200,7 @@ export default function Navbar({
             </a>
             <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
             <a
-              href="https://www.dropbox.com/scl/fi/8pwzxju1g5a7z6k6iskgd/OWOADE_HABEEB_RESUME-4.pdf?rlkey=kqagoji9fa7yafe4v0tj5l4oe&st=iptearno&dl=0"
+              href="/Habeeb-Owoade-CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="nav-link px-2 py-1 text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105 transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade"
