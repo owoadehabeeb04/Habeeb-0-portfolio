@@ -1,7 +1,18 @@
-import Groq from 'groq-sdk'
+import { ChatGroq } from '@langchain/groq'
+import { AIMessage, HumanMessage, SystemMessage, trimMessages } from '@langchain/core/messages'
 import { NextRequest } from 'next/server'
 import { geminiRateLimiter } from '@/lib/rate-limiter'
 import { retrieveRelevantChunks } from '@/lib/portfolio-data'
+
+export const maxDuration = 60
+
+const CHAT_MODEL = 'openai/gpt-oss-120b'
+const HISTORY_TOKEN_BUDGET = 3000
+const CONTINUE_REGEX = /^\s*(continue|go on|keep going|carry on|more|finish|proceed|and\??|then\??)[\s.!?]*$/i
+
+// Cheap token estimate (~4 chars/token) - good enough for trimming history
+const approxTokens = (messages: { content: unknown }[]) =>
+  messages.reduce((sum, m) => sum + Math.ceil(String(m.content).length / 4) + 4, 0)
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,16 +44,17 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Initialize Groq client
-    const groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY,
-    })
+    const isContinuation = CONTINUE_REGEX.test(message)
+    const lastUserMessage = [...conversationHistory]
+      .reverse()
+      .find((msg: { sender: string; text: string }) => msg.sender === 'user' && !CONTINUE_REGEX.test(msg.text))
 
-    // RAG: Retrieve relevant context based on user query
-    const relevantContext = retrieveRelevantChunks(message, 3)
+    // RAG: a bare "continue" has no topic, so retrieve using the last real question
+    const retrievalQuery = isContinuation && lastUserMessage ? `${lastUserMessage.text} ${message}` : message
+    const relevantContext = retrieveRelevantChunks(retrievalQuery, 3)
 
     // Detect if user is using third person (he/his/Habeeb) or second person (you/your)
-    const isThirdPerson = /\b(he|his|him|habeeb|habeeb'?s)\b/i.test(message)
+    const isThirdPerson = /\b(he|his|him|habeeb|habeeb'?s)\b/i.test(retrievalQuery)
 
     // Dynamic system prompt with retrieved context (only relevant chunks - saves tokens!)
     const systemPrompt = `You are Habeeb's AI assistant. Answer questions about Habeeb Owoade using ONLY the context below. Be conversational, detailed, and engaging.
@@ -87,37 +99,43 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
 - For fullstack only: [SHOW_PROJECTS:fullstack]
 - For frontend only: [SHOW_PROJECTS:frontend]
 - For skills: Only use [SHOW_SKILLS] when user asks to SEE/VIEW skills, not when asking "what skills does he have"
-- Default to DETAILED TEXT answers with markdown links unless user clearly wants a visual display`
+- Default to DETAILED TEXT answers with markdown links unless user clearly wants a visual display${isContinuation
+  ? '\n\nCONTINUATION: The user wants you to continue your previous answer. Pick up EXACTLY where it stopped (mid-sentence or mid-table if needed). Do not restart, repeat earlier content, or change topic.'
+  : ''
+}`
 
-    // Build message history (last 4 messages to save tokens)
-    const messages = [
-      {
-        role: 'system' as const,
-        content: systemPrompt,
-      },
-      ...conversationHistory.slice(-4).map((msg: { sender: string; text: string }) => ({
-        role: msg.sender === 'user' ? ('user' as const) : ('assistant' as const),
-        content: msg.text,
-      })),
-      {
-        role: 'user' as const,
-        content: message,
-      },
-    ]
-
-    const stream = await groq.chat.completions.create({
-      model: 'openai/gpt-oss-120b',
-      messages,
-      temperature: 0.7,
-      max_tokens: 800, // Increased for detailed responses
-      top_p: 1,
-      stream: true,
+    // Keep as much recent history as fits the token budget (always starting on a user turn)
+    const history = conversationHistory.map((msg: { sender: string; text: string }) =>
+      msg.sender === 'user' ? new HumanMessage(msg.text) : new AIMessage(msg.text)
+    )
+    const trimmedHistory = await trimMessages(history, {
+      maxTokens: HISTORY_TOKEN_BUDGET,
+      tokenCounter: approxTokens,
+      strategy: 'last',
+      startOn: 'human',
     })
+
+    const model = new ChatGroq({
+      apiKey: process.env.GROQ_API_KEY,
+      model: CHAT_MODEL,
+      temperature: 0.7,
+      // gpt-oss is a reasoning model: reasoning tokens count against this cap
+      maxTokens: 6000,
+      streaming: true,
+      reasoningEffort: 'low',
+    })
+
+    const stream = await model.stream([
+      new SystemMessage(systemPrompt),
+      ...trimmedHistory,
+      new HumanMessage(message),
+    ])
 
     // Create a readable stream for SSE
     const encoder = new TextEncoder()
     let fullResponse = '' // Collect full response to check for markers
     let streamedResponse = '' // What we've already sent to client
+    let truncated = false // Model hit the output token cap
     
     // Regex to match all marker patterns
     const markerRegex = /\[SHOW_PROJECTS(:fullstack|:frontend)?\]|\[SHOW_SKILLS\]/g
@@ -126,7 +144,8 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
       async start(controller) {
         try {
           for await (const chunk of stream) {
-            const content = chunk.choices[0]?.delta?.content || ''
+            const content = typeof chunk.content === 'string' ? chunk.content : ''
+            if (chunk.response_metadata?.finish_reason === 'length') truncated = true
             if (content) {
               fullResponse += content
               
@@ -199,6 +218,10 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
             controller.enqueue(encoder.encode(metadata))
           }
           
+          if (truncated) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ truncated: true })}\n\n`))
+          }
+
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
           controller.close()
         } catch (error) {

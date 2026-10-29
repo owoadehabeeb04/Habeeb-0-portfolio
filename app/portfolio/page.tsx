@@ -9,6 +9,8 @@ import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import { generateMetadata as generateSEOMetadata, profilePageSchema } from '@/lib/seo'
 
+
+
 export const metadata: Metadata = generateSEOMetadata({
   title: 'Portfolio',
   description: 'Explore my portfolio of full-stack projects including AI-powered applications, e-commerce platforms, and enterprise solutions built with React, Next.js, TypeScript, Node.js, and modern web technologies.',

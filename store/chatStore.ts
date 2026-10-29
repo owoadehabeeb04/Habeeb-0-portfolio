@@ -8,6 +8,7 @@ interface Message {
   timestamp: Date
   action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
   filter?: 'fullstack' | 'frontend' | 'all'
+  truncated?: boolean
 }
 
 interface ChatStore {

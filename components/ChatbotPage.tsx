@@ -89,80 +89,8 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
       }
       addMessage(botMessage)
       
-      try {
-        const messageIndex = messages.findIndex(m => m.id === messageId)
-        const recentHistory = messages.slice(0, messageIndex).slice(-4).map(msg => ({
-          sender: msg.sender,
-          text: msg.text,
-        }))
-
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: editedText,
-            conversationHistory: recentHistory,
-          }),
-        })
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || 'Failed to get response')
-        }
-
-        // Handle streaming response
-        const reader = response.body?.getReader()
-        const decoder = new TextDecoder()
-        let accumulatedText = ''
-        let detectedAction: 'SHOW_PROJECTS' | 'SHOW_SKILLS' | undefined = undefined
-        let detectedFilter: 'fullstack' | 'frontend' | 'all' = 'all'
-
-        if (reader) {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-
-            const chunk = decoder.decode(value)
-            const lines = chunk.split('\n')
-
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6)
-                if (data === '[DONE]') {
-                  setIsTyping(false)
-                  break
-                }
-                try {
-                  const parsed = JSON.parse(data)
-                  
-                  if (parsed.action) {
-                    detectedAction = parsed.action
-                    detectedFilter = parsed.filter || 'all'
-                    
-                    updateMessage(botMessageId, { 
-                      action: detectedAction, 
-                      filter: detectedFilter 
-                    })
-                  } else if (parsed.content) {
-                    accumulatedText += parsed.content
-                    updateMessage(botMessageId, { text: accumulatedText })
-                  }
-                } catch (e) {
-                  // Skip invalid JSON
-                }
-              }
-            }
-          }
-        }
-        
-        setIsTyping(false)
-      } catch (error: any) {
-        console.error('Error:', error)
-        updateMessage(botMessageId, { 
-          text: error.message || 'Sorry, I encountered an error. Please try again.' 
-        })
-        setIsTyping(false)
-      }
+      const messageIndex = messages.findIndex(m => m.id === messageId)
+      await streamReply(editedText, messages.slice(0, messageIndex), botMessageId)
     }
 
     setEditingMessageId(null)
@@ -183,113 +111,101 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = async () => {
-    if (!inputValue.trim()) return
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date(),
-    }
-
-    addMessage(userMessage)
-    const currentInput = inputValue
-    setInputValue('')
-    setIsTyping(true)
-
-    // Create placeholder for bot message
-    const botMessageId = (Date.now() + 1).toString()
-    const botMessage: Message = {
-      id: botMessageId,
-      text: '',
-      sender: 'bot',
-      timestamp: new Date(),
-    }
-    addMessage(botMessage)
-
+  // Streams a reply from /api/chat into the bot message. `history` is the conversation before `text`.
+  const streamReply = async (text: string, history: Message[], botMessageId: string) => {
     try {
-      // Build conversation history (last 4 messages for context - saves tokens)
-      const recentHistory = messages.slice(-4).map(msg => ({
-        sender: msg.sender,
-        text: msg.text,
-      }))
-
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: currentInput,
-          conversationHistory: recentHistory,
+          message: text,
+          conversationHistory: history.slice(-12).map(msg => ({ sender: msg.sender, text: msg.text })),
         }),
       })
 
       if (!response.ok) {
         const errorData = await response.json()
-        // Show user-friendly error message for quota issues
         if (response.status === 429) {
           throw new Error('⏳ API quota limit reached. The chatbot will be back shortly. Please try again in a few minutes!')
         }
         throw new Error(errorData.error || 'Failed to get response')
       }
 
-      // Handle streaming response
       const reader = response.body?.getReader()
       const decoder = new TextDecoder()
       let accumulatedText = ''
-      let detectedAction: 'SHOW_PROJECTS' | 'SHOW_SKILLS' | undefined = undefined
-      let detectedFilter: 'fullstack' | 'frontend' | 'all' = 'all'
+      let buffer = '' // holds a partial SSE line between network chunks
+
+      const handleLine = (line: string) => {
+        if (!line.startsWith('data: ')) return
+        const data = line.slice(6)
+        if (data === '[DONE]') return
+        try {
+          const parsed = JSON.parse(data)
+          if (parsed.action) {
+            updateMessage(botMessageId, { action: parsed.action, filter: parsed.filter || 'all' })
+          } else if (parsed.truncated) {
+            updateMessage(botMessageId, { truncated: true })
+          } else if (parsed.content) {
+            accumulatedText += parsed.content
+            updateMessage(botMessageId, { text: accumulatedText })
+          }
+        } catch (e) {
+          // Skip invalid JSON
+        }
+      }
 
       if (reader) {
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
-
-          const chunk = decoder.decode(value)
-          const lines = chunk.split('\n')
-
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6)
-              if (data === '[DONE]') {
-                setIsTyping(false)
-                break
-              }
-              try {
-                const parsed = JSON.parse(data)
-                
-                // Check for action metadata (sent at the end)
-                if (parsed.action) {
-                  detectedAction = parsed.action
-                  detectedFilter = parsed.filter || 'all'
-                  
-                  updateMessage(botMessageId, { 
-                    action: detectedAction, 
-                    filter: detectedFilter 
-                  })
-                } else if (parsed.content) {
-                  // Regular streaming content (markers already stripped by backend)
-                  accumulatedText += parsed.content
-                  updateMessage(botMessageId, { text: accumulatedText })
-                }
-              } catch (e) {
-                // Skip invalid JSON
-              }
-            }
-          }
+          buffer += decoder.decode(value, { stream: true })
+          const lines = buffer.split('\n')
+          buffer = lines.pop() ?? ''
+          lines.forEach(handleLine)
         }
+        handleLine(buffer)
       }
-
-      setIsTyping(false)
     } catch (error: any) {
       console.error('Error:', error)
-      updateMessage(botMessageId, { 
-        text: error.message || 'Sorry, I encountered an error. Please try again.' 
+      updateMessage(botMessageId, {
+        text: error.message || 'Sorry, I encountered an error. Please try again.'
       })
+    } finally {
       setIsTyping(false)
     }
+  }
+
+  const sendText = async (text: string) => {
+    if (!text.trim()) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text,
+      sender: 'user',
+      timestamp: new Date(),
+    }
+
+    addMessage(userMessage)
+    setIsTyping(true)
+
+    // Create placeholder for bot message
+    const botMessageId = (Date.now() + 1).toString()
+    addMessage({
+      id: botMessageId,
+      text: '',
+      sender: 'bot',
+      timestamp: new Date(),
+    })
+
+    await streamReply(text, messages, botMessageId)
+  }
+
+  const handleSend = () => {
+    const text = inputValue
+    if (!text.trim()) return
+    setInputValue('')
+    sendText(text)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -886,6 +802,16 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                 </div>
               </div>
             ))}
+            {!isTyping && messages[messages.length - 1]?.truncated && (
+              <div className="flex justify-start">
+                <button
+                  onClick={() => sendText('continue')}
+                  className="px-4 py-1.5 bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border)] rounded-full text-xs font-medium hover:opacity-90 transition-opacity"
+                >
+                  Continue response
+                </button>
+              </div>
+            )}
             {isTyping && (
               <div className="flex justify-start">
                 <div className="rounded-lg px-3 py-2 sm:px-4 sm:py-2.5">

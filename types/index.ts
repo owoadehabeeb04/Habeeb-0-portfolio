@@ -7,6 +7,7 @@ export interface Message {
   timestamp: Date
   action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
   filter?: 'fullstack' | 'frontend' | 'all'
+  truncated?: boolean
 }
 
 export interface TechStackItem {
