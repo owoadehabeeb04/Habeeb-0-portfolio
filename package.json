@@ -9,7 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:live": "LIVE_API=1 playwright test api"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -23,6 +25,7 @@
     "clsx": "^2.1.1",
     "groq-sdk": "^0.37.0",
     "lucide-react": "^0.562.0",
+    "mermaid": "^11.12.0",
     "next": "^14.2.5",
     "next-themes": "^0.4.6",
     "pdf-parse": "^2.4.5",
@@ -36,6 +39,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -43,6 +47,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
     "postcss": "^8.4.39",
+    "sharp": "^0.35.5",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.21.0",
     "typescript": "^5.5.3"

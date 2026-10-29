@@ -21,11 +21,11 @@ export default function Navbar({
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavVisible, setIsNavVisible] = useState(false)
   const pathname = usePathname()
-  const isAIPage = pathname === '/' || pathname === '/ask-habeeb'
-  
-  // Determine the base path for links
+  const isCaseStudyPage = pathname === '/case-studies' || pathname.startsWith('/projects')
+
+  // Sections live on /portfolio, so every other page links there
   const getNavLink = (section: string) => {
-    return isAIPage ? `/portfolio#${section}` : `#${section}`
+    return pathname === '/portfolio' ? `#${section}` : `/portfolio#${section}`
   }
 
   useEffect(() => {
@@ -89,6 +89,18 @@ export default function Navbar({
           >
             Projects
           </a>
+          <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.12s' }}>|</span>
+          <Link
+            href="/case-studies"
+            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+              isCaseStudyPage
+                ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+            }`}
+            style={{ animationDelay: '0.14s' }}
+          >
+            Case Studies
+          </Link>
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
           <a
             href="/Habeeb-Owoade-CV.pdf"
@@ -198,6 +210,18 @@ export default function Navbar({
             >
               Projects
             </a>
+            <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.12s' }}>|</span>
+            <Link
+              href="/case-studies"
+              className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${
+                isCaseStudyPage
+                  ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+              }`}
+              style={{ animationDelay: '0.14s' }}
+            >
+              Case Studies
+            </Link>
             <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
             <a
               href="/Habeeb-Owoade-CV.pdf"

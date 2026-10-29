@@ -89,8 +89,8 @@ B.Sc. Software Engineering, CGPA 4.71/5.00 (Top 1%), graduated July 2026
 ### LUMES, E-commerce Platform (2026): Next.js, TypeScript, MongoDB, Stripe
 
 - Storefront and custom admin dashboard on the Next.js App Router with NextAuth and role-based access control
-- Stock pre-checks before checkout, idempotent Stripe webhook handling, signed webhook verification, refunds, transactional email through Brevo
-- Admin product suite with TipTap, Zustand and TanStack Query: rich text, multi-image uploads, coupons, low-stock alerts, multilingual support, currency conversion
+- Stock pre-checks before checkout, idempotent Stripe webhook handling, signed webhook verification, admin-managed refunds, transactional email through Brevo
+- Admin product suite with TipTap, Zustand and TanStack Query: rich text, multi-image uploads, coupons, low-stock warnings on the dashboard, location-based currency conversion
 
 ### Recipia, AI Recipe App (2025): Next.js, MongoDB, Gemini API
 

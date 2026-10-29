@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { fullstackProjects, frontendProjects } from '@/constants'
 
@@ -149,11 +150,23 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
             <div className={`flex flex-wrap gap-4 ${
               contentVisible ? 'project-buttons-animate' : ''
             }`}>
+              {project.slug && (
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-sm md:text-base font-medium hover:opacity-90 transition-all duration-300 hover:scale-105"
+                >
+                  Read case study
+                </Link>
+              )}
               <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-sm md:text-base font-medium hover:opacity-90 transition-all duration-300 hover:scale-105"
+                className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 ${
+                  project.slug
+                    ? 'border-2 border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
+                    : 'bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90'
+                }`}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>

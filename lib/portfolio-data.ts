@@ -1,4 +1,28 @@
 // Portfolio knowledge base - chunked for RAG retrieval
+import { caseStudies } from '@/content/case-studies'
+import type { CaseStudy } from '@/types'
+
+// One knowledge chunk per case study, built from the same data as the case-study pages so the site and the chatbot never disagree
+const caseStudyChunk = (study: CaseStudy) => ({
+  id: `cs_${study.slug}`,
+  // Short or generic words would match almost any question (matching is substring-based), so keep only distinctive ones
+  keywords: [
+    study.slug,
+    ...study.title.toLowerCase().split(/\s+/),
+    ...study.stack.map(tech => tech.toLowerCase()),
+    'case study', 'architecture', 'decisions', 'trade-off',
+  ].filter(keyword => keyword.length >= 4),
+  content: `CASE STUDY: ${study.title} - ${study.tagline}
+    ${study.summary}
+    ROLE: ${study.role}${study.credit ? `\n    CREDIT: ${study.credit.text} ${study.credit.name}` : ''}
+    TIMELINE: ${study.timeline}
+    OUTCOMES: ${study.outcomes.map(o => `${o.value} ${o.label}`).join('; ')}
+    KEY DECISIONS:
+${study.decisions.map(d => `    - ${d.title}: ${d.choice} (Trade-off: ${d.tradeoff})`).join('\n')}
+    WHAT I'D DO NEXT: ${study.next.replace(/\n/g, ' ')}
+    Read the full write-up with diagrams: [${study.title} case study](/projects/${study.slug})`,
+})
+
 export const portfolioChunks = [
   {
     id: 'bio',
@@ -56,8 +80,8 @@ export const portfolioChunks = [
     keywords: ['lumes', 'e-commerce', 'ecommerce', 'store', 'storefront', 'stripe', 'webhook', 'webhooks', 'idempotent', 'nextauth', 'mongodb', 'inventory', 'orders', 'refund', 'brevo', 'tiptap', 'admin', 'coupons', 'payment'],
     content: `LUMES - E-commerce Platform (2026) | Next.js, TypeScript, MongoDB, Stripe:
     - Production-ready storefront and custom admin dashboard on the Next.js App Router with NextAuth authentication and role-based access control
-    - Inventory and order lifecycle logic: stock pre-checks before checkout, idempotent Stripe webhook handling, signed webhook verification, refund processing and transactional email through Brevo
-    - Reusable admin product suite with TipTap, Zustand and TanStack Query: rich text, multi-image uploads, coupons, low-stock alerts, multilingual support and currency conversion`
+    - Inventory and order lifecycle logic: stock pre-checks before checkout, idempotent Stripe webhook handling, signed webhook verification, admin-managed refunds (the admin marks an order refunded and the customer is notified; the money is returned through the Stripe Dashboard) and transactional email through Brevo
+    - Reusable admin product suite with TipTap, Zustand and TanStack Query: rich text, multi-image uploads, coupons, low-stock warnings on the admin dashboard, and location-based currency conversion across 9 currencies`
   },
   {
     id: 'education',
@@ -82,13 +106,15 @@ export const portfolioChunks = [
   {
     id: 'omo_ai',
     keywords: ['omo', 'ai', 'chatbot', 'ads', 'analytics', 'prisma', 'postgresql', 'docker', 'langchain', 'experience', 'work', 'job', 'career', 'employment', 'contract', 'rbac', 'roles', 'permissions'],
-    content: `Software Engineer (Contract) at Omo AI (Jul 2025 - Dec 2025, Remote):
-    - Built full-stack product features for an AI-powered marketing analytics platform (businesses track ad performance and engagement) using Next.js, TypeScript, GSAP, Zustand, Prisma, PostgreSQL, Docker, LangChain and Google Cloud Platform
-    - Developed a role-based admin dashboard to manage users, assign roles, configure permissions and control access to platform modules
-    - Designed database structures for users, businesses, roles, permissions and settings for secure multi-role access control
-    - Built authentication (including OAuth via Google Cloud), onboarding, protected route flows and server-side service logic in Next.js
-    - Implemented a dynamic settings module for business configuration, user management, analytics visibility and access control
-    - Collaborated closely with a small engineering team to refine chatbot workflows, automate feedback loops and improve analytics accuracy`
+    content: `Software Engineer (Contract) at Omo AI (Jul 2025 - Dec 2025, Remote). OMO AI is a team product built with Abdulrasheed Akintola (project lead) and the OMO AI team; it is an AI marketing assistant that analyses a business's content, ads and audience.
+    - Authentication and onboarding: email and phone one-time codes, Google sign-in, password recovery, a separate admin sign-in and invited-admin sign-in
+    - Settings module: general, profile, notifications, security and billing sections, with a pricing page and subscription UI
+    - Role-based admin console: roles with per-module permissions enforced on the server, team management, user suspension, subscriptions view
+    - Animated landing page (GSAP), analytics and integrations screens, Prisma schema changes and Docker setup
+    - Worked on the LangChain/LangGraph AI agent with the lead (tools, memory, human approve/deny)
+    - Stack: Next.js, TypeScript, NextAuth, Prisma, PostgreSQL, Stripe, LangChain, LangGraph, GSAP, Docker, Turborepo
+    - Details of the agent's prompts, ad-platform integrations and business logic are confidential
+    - Read the case study: [OMO AI case study](/projects/omo-ai)`
   },
   {
     id: 'nsia',
@@ -121,7 +147,7 @@ export const portfolioChunks = [
   {
     id: 'recipia',
     keywords: ['recipia', 'recipe', 'cooking', 'voice', 'image', 'calendar', 'meal', 'shopping'],
-    content: `Recipia - AI Recipe App (2025) | Next.js, MongoDB, Gemini API:
+    content: `Recipia - AI Recipe App (2025) | Next.js, MongoDB, LangChain agent on Groq models (started on Gemini):
     - AI chatbot with multimodal input (voice and image) and personalized recipe discovery, plus verified cooking reviews
     - Voice input via the browser Web Speech API (speech-to-text) so users can talk to the chatbot instead of typing
     - Google Calendar API integration for real-time meal scheduling and planning; shopping list features alongside meal planning
@@ -175,9 +201,10 @@ export const portfolioChunks = [
     keywords: ['projects', 'built', 'created', 'developed', 'portfolio', 'work', 'show', 'showcase', 'list'],
     content: `## FULLSTACK PROJECTS
 
-### 0. Latest (2026): SEFA and LUMES
+### 0. Latest (2026): SEFA, SoundRadar and LUMES
+- **SoundRadar - Music Release Radar** (Next.js, NestJS, PostgreSQL, RabbitMQ): a crawling pipeline finds releases on the web, one publish step verifies them, listeners get a drop calendar and push alerts. 2000+ releases and a 2,200-genre catalog. [Read the case study](/projects/soundradar)
 - **SEFA - AI Budgeting App** (React Native, TypeScript, Node.js, SSE, Mono API): read-only bank sync, PDF statement import with duplicate detection, AI finance assistant; published as a preprint.
-- **LUMES - E-commerce Platform** (Next.js, TypeScript, MongoDB, Stripe): storefront plus admin dashboard, NextAuth RBAC, idempotent signed Stripe webhooks, refunds, Brevo email.
+- **LUMES - E-commerce Platform** (Next.js, TypeScript, MongoDB, Stripe): storefront plus admin dashboard, NextAuth RBAC, idempotent signed Stripe webhooks, admin-managed refunds, location-based currency, Brevo email.
 
 ### 1. Recipia - AI-Powered Recipe App
 **Category:** Fullstack | AI Recipe Discovery  
@@ -205,7 +232,7 @@ export const portfolioChunks = [
 
 ### 4. Dev Link - Link Sharing App
 **Category:** Fullstack | Link Management  
-**Description:** Built public profiles with verified links, authentication, and shareable URLs to boost user visibility. Designed a link management system enabling users to verify and publicly share key resources with drag-and-drop functionality and real-time previews.  
+**Description:** Built public profiles with verified links, authentication, and shareable URLs to boost user visibility. A link editor with a live phone-mockup preview of the form, protected routes that remember where you were, and a public profile page with a copy-link button. Drag-and-drop reordering is not built yet.  
 **Tech Stack:** Next.js, TypeScript, Firebase
 
 ---
@@ -244,7 +271,7 @@ export const portfolioChunks = [
   {
     id: 'recipia_details',
     keywords: ['recipia', 'recipe', 'cooking', 'voice', 'image', 'calendar', 'meal', 'food', 'ai recipe'],
-    content: `Recipia - AI Recipe App (2025) | Next.js, MongoDB, Gemini API:
+    content: `Recipia - AI Recipe App (2025) | Next.js, MongoDB, LangChain agent on Groq models (started on Gemini):
     
     LIVE: https://recipe-app-kappa-cyan.vercel.app/
     
@@ -256,7 +283,7 @@ export const portfolioChunks = [
     - Personalized dashboards
     - Collaborative features for sharing recipes
     
-    TECH STACK: Next.js, MongoDB, Gemini API, Google Calendar API, TypeScript, LangChain`
+    TECH STACK: Next.js, MongoDB, LangChain, Groq (llama models; the project started on the Gemini API), Google Calendar API, Web Speech API, TypeScript`
   },
   {
     id: 'vyna_details',
@@ -337,11 +364,14 @@ export const portfolioChunks = [
     - Authentication system
     - Shareable URLs to boost user visibility
     - Link management system for verified resource sharing
-    - Drag-and-drop functionality
-    - Real-time link previews
+    - Link editor with a live phone-mockup preview of the form (it mirrors editor state; it is not a live database subscription)
+    - Protected routes that return you to the page you wanted after login
+    - Cloudinary profile pictures
+    - Drag-and-drop reordering is NOT built yet
     
     TECH STACK: Next.js, TypeScript, Firebase`
-  }
+  },
+  ...caseStudies.map(caseStudyChunk),
 ]
 
 // Keyword synonyms and related terms for better matching
@@ -399,7 +429,16 @@ function preprocessQuery(query: string): {
 
 // Enhanced keyword-based retrieval with synonym matching and weighting
 // TODO: Upgrade to semantic embeddings for better relevance
-export function retrieveRelevantChunks(query: string, maxChunks: number = 3): string {
+export interface RetrievedChunk {
+  id: string
+  score: number
+}
+
+export function retrieveChunkDetails(
+  query: string,
+  maxChunks: number = 3,
+  alwaysInclude: string[] = []
+): { text: string; chunks: RetrievedChunk[] } {
   const { expandedQuery, intent } = preprocessQuery(query)
   const lowerQuery = expandedQuery.toLowerCase()
   
@@ -433,18 +472,34 @@ export function retrieveRelevantChunks(query: string, maxChunks: number = 3): st
   })
   
   // Sort by score and take top N
-  const topChunks = scored
+  const top = scored
     .filter(item => item.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, maxChunks)
-    .map(item => item.chunk.content)
-  
-  // Fallback: if no matches, return bio + skills for general queries
-  if (topChunks.length === 0) {
-    const bio = portfolioChunks.find(c => c.id === 'bio')?.content || ''
-    const skills = portfolioChunks.find(c => c.id === 'skills')?.content || ''
-    return `${bio}\n\n${skills}`
+
+  // Chunks that must always be present (e.g. core experience for job matching)
+  for (const id of alwaysInclude) {
+    if (!top.some(item => item.chunk.id === id)) {
+      const forced = scored.find(item => item.chunk.id === id)
+      if (forced) top.push(forced)
+    }
   }
-  
-  return topChunks.join('\n\n')
+
+  // Fallback: if no matches, return bio + skills for general queries
+  if (top.length === 0) {
+    const fallback = portfolioChunks.filter(c => c.id === 'bio' || c.id === 'skills')
+    return {
+      text: fallback.map(c => c.content).join('\n\n'),
+      chunks: fallback.map(c => ({ id: c.id, score: 0 })),
+    }
+  }
+
+  return {
+    text: top.map(item => item.chunk.content).join('\n\n'),
+    chunks: top.map(item => ({ id: item.chunk.id, score: Math.round(item.score * 10) / 10 })),
+  }
+}
+
+export function retrieveRelevantChunks(query: string, maxChunks: number = 3): string {
+  return retrieveChunkDetails(query, maxChunks).text
 }

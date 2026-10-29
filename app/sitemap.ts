@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { fullstackProjects, frontendProjects } from '@/constants'
+import { caseStudies } from '@/content/case-studies'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://habeeb-dev-portfolio.vercel.app'
@@ -26,6 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/case-studies`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/ask-habeeb`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
@@ -33,15 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  // Dynamic routes from projects (if you want individual project pages in the future)
-  const allProjects = [...fullstackProjects, ...frontendProjects]
-  const projectRoutes = allProjects.map((project) => ({
-    url: project.liveUrl,
+  // One page per case study
+  const caseStudyRoutes = caseStudies.map((study) => ({
+    url: `${baseUrl}/projects/${study.slug}`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }))
 
-  return [...routes]
+  return [...routes, ...caseStudyRoutes]
 }
 
