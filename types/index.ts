@@ -16,7 +16,6 @@ export interface Message {
   filter?: 'fullstack' | 'frontend' | 'all'
   truncated?: boolean
   trace?: TraceStep[]
-  fitScore?: number
   sources?: { title: string; url: string }[]
 }
 

@@ -21,8 +21,6 @@ import { Message } from '@/types'
 import ThemeToggle from '@/components/ThemeToggle'
 import Navbar from '@/components/Navbar'
 import AgentTrace from '@/components/AgentTrace'
-import { useVoice } from '@/hooks/useVoice'
-import { JD_PREFILL } from '@/lib/job-match'
 
 interface ChatbotPageProps {
   homeIcon?: 'home' | 'close'
@@ -46,8 +44,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const [mounted, setMounted] = useState(false)
-  const [readAloud, setReadAloud] = useState(false)
-  const { canListen, canSpeak, listening, speakingId, startListening, stopListening, speak, stopSpeaking } = useVoice()
 
   const copyToClipboard = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text)
@@ -116,11 +112,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Clearing the chat should also silence any reply being read aloud
-  useEffect(() => {
-    if (messages.length === 0) stopSpeaking()
-  }, [messages.length, stopSpeaking])
-
   // Streams a reply from /api/chat into the bot message. `history` is the conversation before `text`.
   const streamReply = async (text: string, history: Message[], botMessageId: string) => {
     try {
@@ -156,8 +147,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
             updateMessage(botMessageId, { action: parsed.action, filter: parsed.filter || 'all' })
           } else if (parsed.trace) {
             updateMessage(botMessageId, { trace: parsed.trace })
-          } else if (typeof parsed.fitScore === 'number') {
-            updateMessage(botMessageId, { fitScore: parsed.fitScore })
           } else if (parsed.sources) {
             updateMessage(botMessageId, { sources: parsed.sources })
           } else if (parsed.truncated) {
@@ -182,9 +171,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
         }
         handleLine(buffer)
       }
-
-      // Read the finished reply aloud (best effort: some browsers block speech without a tap)
-      if (readAloud && accumulatedText) speak(botMessageId, accumulatedText)
     } catch (error: any) {
       console.error('Error:', error)
       updateMessage(botMessageId, {
@@ -205,7 +191,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
       timestamp: new Date(),
     }
 
-    stopSpeaking()
     addMessage(userMessage)
     setIsTyping(true)
 
@@ -240,7 +225,7 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col pb-48 sm:pb-52 md:pb-56">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col pb-40 sm:pb-44 md:pb-48">
       {/* Combined sticky container with Navbar and icons */}
       <div className="sticky top-0 z-50 bg-[var(--bg-primary)] border-b lg:border-b-0 border-[var(--border)]/10">
         <div className="hidden lg:flex items-center justify-between px-4 pt-4 pb-2 max-w-[95%] mx-auto">
@@ -617,20 +602,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                       >
                         {message.sender === 'bot' ? (
                           <div className="text-xs sm:text-sm leading-relaxed">
-                            {typeof message.fitScore === 'number' && (
-                              <div className="mb-3 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-3">
-                                <div className="flex items-baseline justify-between">
-                                  <span className="font-medium">Job fit</span>
-                                  <span className="text-lg font-semibold">{message.fitScore}/100</span>
-                                </div>
-                                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[var(--border)]">
-                                  <div
-                                    className="h-full rounded-full bg-[var(--text-primary)] transition-all duration-700"
-                                    style={{ width: `${message.fitScore}%` }}
-                                  />
-                                </div>
-                              </div>
-                            )}
                             <ReactMarkdown 
                               remarkPlugins={[remarkGfm]}
                               rehypePlugins={[rehypeRaw]}
@@ -829,17 +800,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                         <span className="text-[10px] text-[var(--text-secondary)]">
                           {formatTime(message.timestamp)}
                         </span>
-                        {canSpeak && message.sender === 'bot' && message.text && (
-                          <button
-                            onClick={() => (speakingId === message.id ? stopSpeaking() : speak(message.id, message.text))}
-                            className={`transition-opacity p-1 hover:bg-[var(--bg-secondary)] rounded text-[10px] text-[var(--text-secondary)] ${
-                              speakingId === message.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                            }`}
-                            title={speakingId === message.id ? 'Stop' : 'Listen'}
-                          >
-                            {speakingId === message.id ? '⏹ Stop' : '🔊 Listen'}
-                          </button>
-                        )}
                         <button
                           onClick={() => copyToClipboard(message.text, message.id)}
                           className={`transition-opacity p-1 hover:bg-[var(--bg-secondary)] rounded ${
@@ -923,29 +883,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                   target.style.height = `${Math.min(target.scrollHeight, window.innerWidth < 640 ? 100 : 120)}px`
                 }}
               />
-              {canListen && (
-                <button
-                  onClick={() => {
-                    if (listening) {
-                      stopListening()
-                    } else {
-                      const base = inputValue ? `${inputValue.trimEnd()} ` : ''
-                      startListening(transcript => setInputValue(base + transcript))
-                    }
-                  }}
-                  className={`p-2 rounded-lg transition-all duration-300 flex-shrink-0 border border-[var(--border)] ${
-                    listening ? 'bg-red-500 text-white animate-pulse' : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
-                  }`}
-                  title={listening ? 'Stop listening' : 'Speak your question'}
-                  aria-label={listening ? 'Stop listening' : 'Speak your question'}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="9" y="2" width="6" height="12" rx="3"></rect>
-                    <path d="M5 11a7 7 0 0 0 14 0"></path>
-                    <line x1="12" y1="18" x2="12" y2="22"></line>
-                  </svg>
-                </button>
-              )}
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim()}
@@ -972,31 +909,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           {/* Persistent Suggestion Chips - Always visible below textarea */}
           <div className="mt-3 overflow-x-auto scrollbar-hide pb-1">
             <div className="flex gap-2 justify-start min-w-max">
-              {canSpeak && (
-                <button
-                  onClick={() => {
-                    if (readAloud) stopSpeaking()
-                    setReadAloud(!readAloud)
-                  }}
-                  aria-pressed={readAloud}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 border rounded-full text-xs sm:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
-                    readAloud
-                      ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)]'
-                      : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-[var(--border)] hover:border-[var(--text-primary)]'
-                  }`}
-                >
-                  🔊 Read replies aloud
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  setInputValue(`${JD_PREFILL}\n\n`)
-                  inputRef.current?.focus()
-                }}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border border-[var(--text-primary)] rounded-full text-xs sm:text-sm transition-all duration-300 hover:scale-105 whitespace-nowrap flex-shrink-0"
-              >
-                Match me to a job
-              </button>
               {[
                 "Show me your projects",
                 "What technologies do you work with?",

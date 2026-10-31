@@ -477,7 +477,7 @@ export function retrieveChunkDetails(
     .sort((a, b) => b.score - a.score)
     .slice(0, maxChunks)
 
-  // Chunks that must always be present (e.g. core experience for job matching)
+  // Include any chunks explicitly requested by the caller.
   for (const id of alwaysInclude) {
     if (!top.some(item => item.chunk.id === id)) {
       const forced = scored.find(item => item.chunk.id === id)

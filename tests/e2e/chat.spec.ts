@@ -1,10 +1,60 @@
 import { test, expect } from '@playwright/test'
 import { mockChat, openChat, send, input } from './helpers'
 
+for (const path of ['/', '/ask-habeeb']) {
+  for (const width of [390, 1280]) {
+    test(`text-only chat at ${path} with viewport ${width}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      // Supported speech APIs must not cause voice controls or speech calls to return.
+      await page.addInitScript(() => {
+        const fail = () => { throw new Error('Speech must not be used') }
+        Object.assign(window, { SpeechRecognition: fail, webkitSpeechRecognition: fail, SpeechSynthesisUtterance: fail })
+        Object.defineProperty(window, 'speechSynthesis', {
+          configurable: true,
+          value: { speak: fail, cancel: fail },
+        })
+      })
+      const errors: string[] = []
+      page.on('pageerror', error => errors.push(error.message))
+      await mockChat(page, [{ content: 'Text-only reply' }])
+      await page.goto(path)
+      await expect(input(page)).toBeVisible()
+      const removedControls = page.getByRole('button', {
+        name: /Match me to a job|Read replies aloud|Speak your question|Stop listening|^Listen$|^Stop$/,
+      })
+      await expect(removedControls).toHaveCount(0)
+      await expect(page.getByRole('button', { name: 'Show me your projects', exact: true })).toBeVisible()
+      await send(page, 'Tell me about your experience')
+      await expect(page.getByText('Text-only reply')).toBeVisible()
+      await expect(removedControls).toHaveCount(0)
+      expect(errors).toEqual([])
+    })
+  }
+}
+
+test('saved conversations with old fit scores remain readable without badges', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (localStorage.getItem('habeeb-chat-storage')) return
+    localStorage.setItem('habeeb-chat-storage', JSON.stringify({
+      state: { messages: [
+        { id: 'old-user', sender: 'user', text: 'My previous question', timestamp: new Date().toISOString() },
+        { id: 'old-bot', sender: 'bot', text: 'My saved answer', timestamp: new Date().toISOString(), fitScore: 87 },
+      ] },
+      version: 0,
+    }))
+  })
+  await openChat(page)
+  await expect(page.getByText('My previous question')).toBeVisible()
+  await expect(page.getByText('My saved answer')).toBeVisible()
+  await expect(page.getByText('Job fit', { exact: true })).toHaveCount(0)
+  await expect(page.getByText('87/100', { exact: true })).toHaveCount(0)
+  await page.reload()
+  await expect(page.getByText('My saved answer')).toBeVisible()
+})
+
 test.describe('chat basics', () => {
-  test('shows suggestion chips including the job matcher chip', async ({ page }) => {
+  test('shows the text suggestion chips', async ({ page }) => {
     await openChat(page)
-    await expect(page.getByRole('button', { name: 'Match me to a job' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Show me your projects' })).toBeVisible()
   })
 
@@ -137,7 +187,7 @@ test.describe('truncation and continue', () => {
   })
 })
 
-test.describe('sources, trace and job match', () => {
+test.describe('sources and trace', () => {
   test('shows a Sources line with clickable links', async ({ page }) => {
     await mockChat(page, [
       { content: 'See his GitHub.' },
@@ -168,20 +218,5 @@ test.describe('sources, trace and job match', () => {
     await expect(page.getByText('Retrieved 2 knowledge chunks')).toBeVisible()
     await expect(page.getByText('skills (score 5)')).toBeVisible()
     await expect(page.getByText('Reason: no API key')).toBeVisible()
-  })
-
-  test('the job match chip prefills the input and focuses it', async ({ page }) => {
-    await openChat(page)
-    await page.getByRole('button', { name: 'Match me to a job' }).click()
-    await expect(input(page)).toHaveValue(/how well does Habeeb fit\?/)
-    await expect(input(page)).toBeFocused()
-  })
-
-  test('job match reply shows the fit score badge', async ({ page }) => {
-    await mockChat(page, [{ content: '## Fit score: 87/100\nStrong match.' }, { fitScore: 87 }])
-    await openChat(page)
-    await send(page, "Here's a job description - how well does Habeeb fit?\n\nReact role")
-    await expect(page.getByText('87/100').first()).toBeVisible()
-    await expect(page.getByText('Job fit')).toBeVisible()
   })
 })

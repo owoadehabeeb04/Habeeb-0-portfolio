@@ -4,7 +4,6 @@ import { NextRequest } from 'next/server'
 import { geminiRateLimiter } from '@/lib/rate-limiter'
 import { retrieveChunkDetails } from '@/lib/portfolio-data'
 import { searchWeb, shouldSearchWeb, type WebSearchResult } from '@/lib/web-search'
-import { isJobDescription, truncateJobDescription, JD_CORE_CHUNKS, JD_PROMPT } from '@/lib/job-match'
 import type { TraceStep } from '@/types'
 
 export const maxDuration = 60
@@ -48,37 +47,31 @@ export async function POST(request: NextRequest) {
     }
 
     const trace: TraceStep[] = []
-    const isJobMatch = isJobDescription(message)
-    const isContinuation = !isJobMatch && CONTINUE_REGEX.test(message)
+    const isContinuation = CONTINUE_REGEX.test(message)
     const lastUserMessage = [...conversationHistory]
       .reverse()
       .find((msg: { sender: string; text: string }) => msg.sender === 'user' && !CONTINUE_REGEX.test(msg.text))
 
     // RAG: a bare "continue" has no topic, so retrieve using the last real question
     const retrievalQuery = isContinuation && lastUserMessage ? `${lastUserMessage.text} ${message}` : message
-    // Job matching: use the job post as the query and always include his core background
-    const { text: relevantContext, chunks: retrievedChunks } = isJobMatch
-      ? retrieveChunkDetails(truncateJobDescription(message).slice(0, 1500), 4, JD_CORE_CHUNKS)
-      : retrieveChunkDetails(retrievalQuery, 5)
+    const { text: relevantContext, chunks: retrievedChunks } = retrieveChunkDetails(retrievalQuery, 5)
 
     trace.push({
       step: 'mode',
-      label: isJobMatch ? 'Job match' : isContinuation ? 'Continuation' : 'Question',
-      detail: isJobMatch
-        ? 'Detected a job description; scoring fit against his background'
-        : isContinuation
-          ? 'Continuing the previous answer'
-          : undefined,
+      label: isContinuation ? 'Continuation' : 'Question',
+      detail: isContinuation
+        ? 'Continuing the previous answer'
+        : undefined,
     })
     trace.push({
       step: 'retrieve',
       label: `Retrieved ${retrievedChunks.length} knowledge chunks`,
-      detail: isJobMatch ? 'Query: the job description (first 1500 chars)' : `Query: ${retrievalQuery.slice(0, 200)}`,
+      detail: `Query: ${retrievalQuery.slice(0, 200)}`,
       items: retrievedChunks.map(c => `${c.id} (score ${c.score})`),
     })
 
     // Web search (Tavily) only when the question needs public/online info the portfolio data lacks
-    const searchRequested = !isContinuation && !isJobMatch && shouldSearchWeb(message)
+    const searchRequested = !isContinuation && shouldSearchWeb(message)
     const webResult: WebSearchResult | null = searchRequested ? await searchWeb(message) : null
     const webSources = webResult?.sources ?? []
     trace.push(
@@ -146,25 +139,22 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
 - Default to DETAILED TEXT answers with markdown links unless user clearly wants a visual display${isContinuation
   ? '\n\nCONTINUATION: The user wants you to continue your previous answer. Pick up EXACTLY where it stopped (mid-sentence or mid-table if needed). Do not restart, repeat earlier content, or change topic.'
   : ''
-}${isJobMatch ? JD_PROMPT : ''}`
+}`
 
     // Keep as much recent history as fits the token budget (always starting on a user turn)
     const history = conversationHistory.map((msg: { sender: string; text: string }) =>
       msg.sender === 'user' ? new HumanMessage(msg.text) : new AIMessage(msg.text)
     )
-    // A job description is self-contained; prior chat would only distract the scoring
-    const trimmedHistory = isJobMatch
-      ? []
-      : await trimMessages(history, {
-          maxTokens: HISTORY_TOKEN_BUDGET,
-          tokenCounter: approxTokens,
-          strategy: 'last',
-          startOn: 'human',
-        })
+    const trimmedHistory = await trimMessages(history, {
+      maxTokens: HISTORY_TOKEN_BUDGET,
+      tokenCounter: approxTokens,
+      strategy: 'last',
+      startOn: 'human',
+    })
     trace.push({
       step: 'history',
       label: `Memory: ${trimmedHistory.length} of ${history.length} earlier messages`,
-      detail: isJobMatch ? 'Skipped for job matching' : `Token budget ${HISTORY_TOKEN_BUDGET}`,
+      detail: `Token budget ${HISTORY_TOKEN_BUDGET}`,
     })
     trace.push({ step: 'generate', label: `Generating with ${CHAT_MODEL}` })
 
@@ -181,7 +171,7 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
     const stream = await model.stream([
       new SystemMessage(systemPrompt),
       ...trimmedHistory,
-      new HumanMessage(isJobMatch ? truncateJobDescription(message) : message),
+      new HumanMessage(message),
     ])
 
     // Create a readable stream for SSE
@@ -191,7 +181,7 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
     let truncated = false // Model hit the output token cap
     
     // Regex to match all marker patterns
-    const markerRegex = /\[SHOW_PROJECTS(:fullstack|:frontend)?\]|\[SHOW_SKILLS\]|\[FIT_SCORE:\d{1,3}\]/g
+    const markerRegex = /\[SHOW_PROJECTS(:fullstack|:frontend)?\]|\[SHOW_SKILLS\]/g
     
     const readable = new ReadableStream({
       async start(controller) {
@@ -220,15 +210,6 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
                 if (isPartialMarker) break
               }
 
-              // Variable-length marker: hold back a trailing "[FIT_SCORE:8" until it closes
-              const lastBracket = fullResponse.lastIndexOf('[')
-              if (lastBracket !== -1) {
-                const tail = fullResponse.slice(lastBracket)
-                if (!tail.includes(']') && ('[FIT_SCORE:'.startsWith(tail) || /^\[FIT_SCORE:\d{0,3}$/.test(tail))) {
-                  isPartialMarker = true
-                }
-              }
-              
               // Also check if we're at the very start and might be building a marker
               // Don't stream anything until we have at least 30 chars OR we're sure it's not a marker
               const shouldWaitForMore = fullResponse.length < 30 && 
@@ -283,12 +264,6 @@ SPECIAL UI TRIGGERS (USE VERY CAREFULLY):
             controller.enqueue(encoder.encode(metadata))
           }
           
-          const fitMatch = fullResponse.match(/\[FIT_SCORE:(\d{1,3})\]/)
-          if (isJobMatch && fitMatch) {
-            const fitScore = Math.min(100, Number(fitMatch[1]))
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ fitScore })}\n\n`))
-          }
-
           if (webSources.length) {
             const sources = webSources.map(({ title, url }) => ({ title, url }))
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ sources })}\n\n`))

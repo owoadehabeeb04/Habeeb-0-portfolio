@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-// Real route tests. The first two never reach the model; the live ones need GROQ_API_KEY and run with LIVE_API=1
+// Real route tests. The missing-message check never reaches the model; live tests run with LIVE_API=1
 // Fails with the response body (e.g. a 429 from the rate limiter) instead of a confusing TypeError
 async function readEvents(response: import('@playwright/test').APIResponse) {
   const raw = await response.text()
@@ -35,23 +35,6 @@ test.describe('/api/chat', () => {
     test.setTimeout(120_000)
     // The route has an in-memory rate limiter (12/min) and Groq has token limits: don't fire these in parallel
     test.describe.configure({ mode: 'serial' })
-
-    test('job description is detected, scored and the marker never leaks', async ({ request }) => {
-      const message =
-        "Here's a job description - how well does Habeeb fit?\n\nFull-stack Engineer (Next.js). Responsibilities: build AI-powered SaaS features with Next.js, TypeScript, Node.js and PostgreSQL. Requirements: 2+ years of experience, LLM agents, role-based access control. Remote, full-time. Apply now."
-      const response = await postChat(request, { data: { message, conversationHistory: [] } })
-      expect(response.status()).toBe(200)
-      const events = await readEvents(response)
-
-      const trace = events.find(e => e.trace)!.trace as { step: string; label: string }[]
-      expect(trace[0].label).toBe('Job match')
-      const score = events.find(e => typeof e.fitScore === 'number')?.fitScore
-      expect(score).toBeGreaterThanOrEqual(0)
-      expect(score).toBeLessThanOrEqual(100)
-      const text = events.map(e => e.content ?? '').join('')
-      expect(text).not.toContain('[FIT_SCORE')
-      expect(text).toContain('Honest gaps')
-    })
 
     test('"continue" retrieves with the previous question and reports it in the trace', async ({ request }) => {
       const response = await postChat(request, {
