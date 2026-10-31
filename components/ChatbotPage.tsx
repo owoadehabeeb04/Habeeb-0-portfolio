@@ -560,7 +560,9 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                 key={message.id}
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} group`}
               >
-                <div className={`max-w-[85%] sm:max-w-[80%] ${message.sender === 'user' ? 'flex flex-col items-end' : ''}`}>
+                <div className={message.sender === 'user'
+                  ? 'max-w-[85%] sm:max-w-[80%] flex flex-col items-end'
+                  : 'w-full min-w-0 max-w-full sm:w-auto sm:max-w-[80%]'}>
                   {editingMessageId === message.id ? (
                     <div className="w-full">
                       <textarea
@@ -591,14 +593,14 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                   ) : (
                     <>
                       <div
-                        className={`rounded-2xl px-3.5 py-2 ${
+                        className={`rounded-2xl py-2 ${
                           message.sender === 'user'
-                            ? 'bg-[var(--text-primary)] text-[var(--bg-primary)]'
-                            : 'text-[var(--text-primary)]'
+                            ? 'px-3.5 bg-[var(--text-primary)] text-[var(--bg-primary)]'
+                            : 'px-0 sm:px-3.5 text-[var(--text-primary)]'
                         }`}
                       >
                         {message.sender === 'bot' ? (
-                          <div className="text-xs sm:text-sm leading-relaxed">
+                          <div className="min-w-0 break-words text-xs sm:text-sm leading-relaxed">
                             <ReactMarkdown 
                               remarkPlugins={[remarkGfm]}
                               rehypePlugins={[rehypeRaw]}
