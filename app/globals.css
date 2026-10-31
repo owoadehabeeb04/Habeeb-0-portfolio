@@ -779,8 +779,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-buttons-animate {
-  animation: fade-in-up 0.6s ease-out 0.3s forwards;
-  opacity: 0;
+  animation: fade-in-up 0.6s ease-out 0.3s backwards;
 }
 
 /* Enhanced text animations for more variety */
@@ -843,22 +842,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@keyframes buttons-slide-up-skew {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.9) skewX(-10deg);
-    filter: blur(5px);
-  }
-  50% {
-    transform: translateY(-5px) scale(1.05) skewX(5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) skewX(0deg);
-    filter: blur(0px);
-  }
-}
-
 /* Apply new text animation classes */
 .title-bounce-skew-animate {
   animation: title-bounce-skew 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -877,11 +860,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .tech-icons-bounce-animate {
   animation: tech-icons-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-}
-
-.buttons-slide-up-skew-animate {
-  animation: buttons-slide-up-skew 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s forwards;
   opacity: 0;
 }
 

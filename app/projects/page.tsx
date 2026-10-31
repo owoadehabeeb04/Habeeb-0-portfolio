@@ -176,7 +176,7 @@ function ProjectCard({ project, index, isEven }: ProjectCardProps) {
 
             {/* Action Buttons */}
             <div className={`flex flex-wrap gap-4 ${
-              contentVisible ? (index % 2 === 0 ? 'project-buttons-animate' : 'buttons-slide-up-skew-animate') : ''
+              contentVisible ? 'project-buttons-animate' : ''
             }`}>
               {project.slug && (
                 <Link
