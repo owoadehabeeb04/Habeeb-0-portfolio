@@ -20,7 +20,6 @@ import { Button } from '@/components/ui/button'
 import { Message } from '@/types'
 import ThemeToggle from '@/components/ThemeToggle'
 import Navbar from '@/components/Navbar'
-import AgentTrace from '@/components/AgentTrace'
 
 interface ChatbotPageProps {
   homeIcon?: 'home' | 'close'
@@ -145,8 +144,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
           const parsed = JSON.parse(data)
           if (parsed.action) {
             updateMessage(botMessageId, { action: parsed.action, filter: parsed.filter || 'all' })
-          } else if (parsed.trace) {
-            updateMessage(botMessageId, { trace: parsed.trace })
           } else if (parsed.sources) {
             updateMessage(botMessageId, { sources: parsed.sources })
           } else if (parsed.truncated) {
@@ -692,7 +689,6 @@ export default function ChatbotPage({ homeIcon = 'home', homeLink = '/portfolio'
                               {message.text}
                             </ReactMarkdown>
 
-                            {message.trace && message.trace.length > 0 && <AgentTrace trace={message.trace} />}
 
                             {message.sources && message.sources.length > 0 && (
                               <div className="mt-3 text-xs text-[var(--text-secondary)]">

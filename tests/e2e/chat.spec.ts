@@ -187,7 +187,7 @@ test.describe('truncation and continue', () => {
   })
 })
 
-test.describe('sources and trace', () => {
+test.describe('sources and hidden trace metadata', () => {
   test('shows a Sources line with clickable links', async ({ page }) => {
     await mockChat(page, [
       { content: 'See his GitHub.' },
@@ -199,7 +199,7 @@ test.describe('sources and trace', () => {
     await expect(link).toHaveAttribute('href', 'https://github.com/owoadehabeeb04')
   })
 
-  test('agent trace is collapsed by default and expands with the steps', async ({ page }) => {
+  test('trace metadata does not appear in the chat', async ({ page }) => {
     await mockChat(page, [
       {
         trace: [
@@ -214,9 +214,8 @@ test.describe('sources and trace', () => {
     await send(page, 'skills?')
     await expect(page.getByText('answer with trace')).toBeVisible()
     await expect(page.getByText('Retrieved 2 knowledge chunks')).toHaveCount(0)
-    await page.getByRole('button', { name: /How I answered/ }).click()
-    await expect(page.getByText('Retrieved 2 knowledge chunks')).toBeVisible()
-    await expect(page.getByText('skills (score 5)')).toBeVisible()
-    await expect(page.getByText('Reason: no API key')).toBeVisible()
+    await expect(page.getByRole('button', { name: /How I answered/ })).toHaveCount(0)
+    await expect(page.getByText('skills (score 5)')).toHaveCount(0)
+    await expect(page.getByText('Reason: no API key')).toHaveCount(0)
   })
 })

@@ -15,7 +15,6 @@ export interface Message {
   action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
   filter?: 'fullstack' | 'frontend' | 'all'
   truncated?: boolean
-  trace?: TraceStep[]
   sources?: { title: string; url: string }[]
 }
 

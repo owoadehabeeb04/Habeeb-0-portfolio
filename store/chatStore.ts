@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { TraceStep } from '@/types'
 
 interface Message {
   id: string
@@ -10,7 +9,6 @@ interface Message {
   action?: 'SHOW_PROJECTS' | 'SHOW_SKILLS'
   filter?: 'fullstack' | 'frontend' | 'all'
   truncated?: boolean
-  trace?: TraceStep[]
   sources?: { title: string; url: string }[]
 }
 
