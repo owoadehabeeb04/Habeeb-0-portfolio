@@ -122,7 +122,7 @@ One idea runs through all of it, a **review gate**: the system prepares work and
   challenges: `- **Latency and crashes.** Early assistant replies were slow and one bug failed every response; both were fixed in the backend history.
 - **Slow vision calls.** They are far slower than a 30-second client default, so they get a longer single attempt with no automatic retry that would double the wait.
 - **Messy data.** Amount validation went through several commits before real statements stopped producing odd rows.`,
-  results: `On a 300-transaction synthetic benchmark, reported in the preprint: **99.49%** parser field agreement, **78.40%** clear-category accuracy and **1.000** duplicate-detection F1.
+  results: `On a deterministic 300-transaction synthetic benchmark across six controlled statement conditions, reported in the preprint: **99.49%** parser field agreement (3,880 of 3,900 independently scored fields), **78.40%** clear-category accuracy and **1.000** duplicate-detection F1. The paper states its evidence boundaries: PDF/OCR extraction, external LLM behaviour, production security and real-user outcomes were not evaluated.
 
 The product runs end to end: Android builds ship through Expo's build service, the website is live, and 29 Jest test files cover the assistant, bank security, insights and the statement pipeline. The part I am proudest of is the review gate: in every flow, the worst a model mistake can do is appear as a row waiting for approval.`,
   next: `- Run the benchmark in CI as accuracy regression tests; today the evaluation lives in the paper, not the build.

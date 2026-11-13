@@ -231,6 +231,28 @@ export function generateProjectSchema(project: {
   }
 }
 
+export function generateScholarlyArticleSchema(publication: {
+  title: string
+  year: number
+  doi: string
+  url: string
+  summary: string
+  venue: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ScholarlyArticle',
+    headline: publication.title,
+    description: publication.summary,
+    datePublished: String(publication.year),
+    url: publication.url,
+    sameAs: publication.url,
+    identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: publication.doi },
+    isPartOf: { '@type': 'Periodical', name: publication.venue },
+    author: { '@type': 'Person', name: 'Habeeb Temitope Owoade', url: siteConfig.author.url },
+  }
+}
+
 export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
   return {
     '@context': 'https://schema.org',
