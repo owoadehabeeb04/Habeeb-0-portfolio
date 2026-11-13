@@ -183,7 +183,23 @@ export default function About() {
               </p> */}
 
               <p className="text-base md:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed">
-                I completed my SIWES internship at NSIA Insurance Limited Nigeria, where I gained hands-on industry experience and a clearer understanding of how software operates within large organizations. I&apos;m currently in my final year studying Software Engineering, with multiple completed projects and a strong drive to keep learning, building, and refining my craft.
+                I completed my SIWES internship at NSIA Insurance Limited Nigeria, where I gained hands-on industry experience and a clearer understanding of how software operates within large organizations. I graduated from Bowen University in 2026 with a B.Sc. in Software Engineering, with multiple completed projects and a strong drive to keep learning, building, and refining my craft.
+              </p>
+
+              <p className="text-base md:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed">
+                Alongside product work, I do{' '}
+                <a href="#research" className="text-[var(--text-primary)] font-semibold underline decoration-2 underline-offset-4">
+                  research
+                </a>{' '}
+                on how LLM agents fail and how to make their actions safer. I have published two preprints, and I write up what I build as{' '}
+                <a href="/case-studies" className="text-[var(--text-primary)] font-semibold underline decoration-2 underline-offset-4">
+                  case studies
+                </a>
+                . I am also learning{' '}
+                <a href="#system-design" className="text-[var(--text-primary)] font-semibold underline decoration-2 underline-offset-4">
+                  system design
+                </a>
+                , starting with Pastebin: designed for scale on paper, then built and run as one local copy.
               </p>
             </div>
 

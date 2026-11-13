@@ -110,6 +110,9 @@ CRITICAL RULES:
 - You ARE the portfolio - provide direct, detailed answers
 - When mentioning "see all skills" or "full list of technologies", ALWAYS link to: [see his full list of technologies](/portfolio#skills)
 - When mentioning "view all projects" or "see his projects", link to: [view his projects](/portfolio#projects)
+- When mentioning his research, publications or preprints, link to: [Research & Publications](/portfolio#research)
+- When mentioning system design work (for example Pastebin), link to: [System Design](/portfolio#system-design) or the full design at [Pastebin system design](/system-design/pastebin)
+- When mentioning in-depth project write-ups, link to: [case studies](/case-studies)
 
 PERSPECTIVE RULES:
 ${isThirdPerson 

@@ -1,5 +1,5 @@
 import type { CaseStudy } from '@/types'
-import { pastebinLinks } from '@/content/system-design'
+import { pastebinDiagrams, pastebinLinks } from '@/content/system-design'
 
 export const pastebin: CaseStudy = {
   slug: 'pastebin',
@@ -103,7 +103,8 @@ One \`pastes\` table with the code as the primary key, an optional user, the tex
     },
   ],
   diagrams: [],
-  gallery: [],
+  gallery: pastebinDiagrams,
+  galleryTitle: 'Diagrams',
   challenges: `- **Collisions are certain at scale.** With 1 billion pastes in a region, about 1 new code in 57 is already taken. So the retry is a real part of the design, not an edge case.
 - **Not claiming too much.** One local copy cannot prove a three-region design. Most of the hard parts (a whole region going down, replica promotion, a CDN) are on paper only, and I label them that way.
 - **Cache hit rate is a guess.** Caching the top 20% of pastes does not mean 80% of reads come from the cache. That depends on how skewed real traffic is, so it would need to be measured and the cache resized.`,

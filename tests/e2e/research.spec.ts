@@ -108,4 +108,25 @@ test.describe('Research navbar link', () => {
       expect(box!.x + box!.width).toBeLessThanOrEqual(width)
     })
   }
+
+  test('research interests scroll sideways on a phone without widening the page', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/portfolio')
+    const chips = page.getByLabel('Research interests')
+    await chips.scrollIntoViewIfNeeded()
+    const m = await chips.evaluate(el => ({ scroll: el.scrollWidth, client: el.clientWidth, overflowX: getComputedStyle(el).overflowX }))
+    expect(m.overflowX).toBe('auto')
+    expect(m.scroll).toBeGreaterThan(m.client)
+    await chips.evaluate(el => el.scrollTo({ left: 400 }))
+    expect(await chips.evaluate(el => el.scrollLeft)).toBeGreaterThan(0)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+
+  test('research interests wrap and stay centred on desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/portfolio')
+    const chips = page.getByLabel('Research interests')
+    const m = await chips.evaluate(el => ({ scroll: el.scrollWidth, client: el.clientWidth }))
+    expect(m.scroll).toBeLessThanOrEqual(m.client)
+  })
 })

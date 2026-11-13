@@ -57,7 +57,10 @@ export interface CaseStudyImage {
   alt: string
   caption?: string
   // Phone screenshots are shown narrower than desktop ones
-  kind?: 'desktop' | 'mobile'
+  kind?: 'desktop' | 'mobile' | 'diagram'
+  // Real pixel size, needed for diagrams whose shape is not a phone or desktop screenshot
+  width?: number
+  height?: number
 }
 
 export interface CaseStudyLink {
@@ -85,6 +88,7 @@ export interface CaseStudy {
   decisions: CaseStudyDecision[]
   diagrams: CaseStudyDiagram[]
   gallery: CaseStudyImage[]
+  galleryTitle?: string // defaults to 'In the app'
   challenges: string
   results: string
   next: string

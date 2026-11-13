@@ -136,4 +136,38 @@ test.describe('system design pages', () => {
     expect(text).toContain('READ PATH')
     expect(text).toContain('[design only]')
   })
+
+  test('detail page shows the four diagrams, sharp and enlargeable', async ({ page }) => {
+    await page.goto('/system-design/pastebin')
+    const section = page.locator('#diagrams')
+    await expect(section.locator('img')).toHaveCount(4)
+    for (const img of await section.locator('img').all()) {
+      await img.scrollIntoViewIfNeeded()
+      await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true)
+    }
+    await section.getByRole('button').first().click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+  })
+
+  test('case study shows the diagrams under a Diagrams heading', async ({ page }) => {
+    await page.goto('/projects/pastebin')
+    await expect(page.getByRole('heading', { name: 'Diagrams', exact: true })).toBeVisible()
+    await expect(page.locator('#screens img')).toHaveCount(4)
+  })
+
+  test('detail page content has side padding of at least 24px on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/system-design/pastebin')
+    const left = await page.locator('article').first().evaluate(el => el.getBoundingClientRect().left + parseFloat(getComputedStyle(el).paddingLeft))
+    expect(left).toBeGreaterThanOrEqual(24)
+  })
+
+  test('chatbot lists Pastebin among the projects and the About section mentions research', async ({ page }) => {
+    const { text } = retrieveChunkDetails('show me the pastebin project you built', 5)
+    expect(text).toContain('/system-design/pastebin')
+    await page.goto('/portfolio')
+    await expect(page.locator('#aboutme')).toContainText('research')
+    await expect(page.locator('#aboutme')).toContainText('system design')
+    await expect(page.locator('#aboutme')).not.toContainText('final year')
+  })
 })

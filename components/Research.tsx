@@ -31,9 +31,9 @@ export default function Research() {
         </div>
 
         <Fade>
-          <ul className="mb-12 flex flex-wrap justify-center gap-2" aria-label="Research interests">
+          <ul className="scrollbar-hide -mx-4 mb-12 flex snap-x gap-2 overflow-x-auto px-4 pb-2 md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0" aria-label="Research interests" style={{ scrollbarWidth: 'none' }}>
             {researchInterests.map(interest => (
-              <li key={interest} className="rounded-full border border-[var(--border)] bg-[var(--bg-secondary)]/40 px-3 py-1 text-xs text-[var(--text-secondary)] md:text-sm">
+              <li key={interest} className="flex-shrink-0 snap-start whitespace-nowrap rounded-full border border-[var(--border)] bg-[var(--bg-secondary)]/40 px-3 py-1 text-xs text-[var(--text-secondary)] md:text-sm">
                 {interest}
               </li>
             ))}

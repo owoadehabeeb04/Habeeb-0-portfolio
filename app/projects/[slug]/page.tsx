@@ -169,7 +169,7 @@ export default function CaseStudyPage({ params }: PageProps) {
         </Section>
 
         {study.gallery.length > 0 && (
-          <Section id="screens" title="In the app">
+          <Section id="screens" title={study.galleryTitle ?? 'In the app'}>
             <Gallery images={study.gallery} />
           </Section>
         )}

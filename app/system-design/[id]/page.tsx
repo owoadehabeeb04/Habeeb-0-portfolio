@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import Gallery from '@/components/case-study/Gallery'
 import { getSystemDesign, systemDesigns, type DesignStatus } from '@/content/system-design'
 import { generateBreadcrumbSchema, generateMetadata as generateSEOMetadata, siteConfig } from '@/lib/seo'
 
@@ -36,7 +37,7 @@ function Badge({ status }: { status: DesignStatus }) {
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
-    <section id={id} className="mt-14 scroll-mt-24">
+    <section id={id} className="mt-16 scroll-mt-24">
       <h2 className="mb-4 text-2xl font-bold text-[var(--text-primary)] md:text-3xl">{title}</h2>
       {children}
     </section>
@@ -45,7 +46,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 function Bullets({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {items.map(item => (
         <li key={item} className="flex items-start gap-3 text-base leading-relaxed text-[var(--text-secondary)]">
           <span className="mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--text-primary)]"></span>
@@ -59,7 +60,7 @@ function Bullets({ items }: { items: string[] }) {
 function StatusList({ items, ordered = false }: { items: { text: string; status: DesignStatus }[]; ordered?: boolean }) {
   const Tag = ordered ? 'ol' : 'ul'
   return (
-    <Tag className="space-y-3">
+    <Tag className="space-y-4">
       {items.map((item, i) => (
         <li key={item.text} className="flex items-start gap-3 text-base leading-relaxed text-[var(--text-secondary)]">
           {ordered ? (
@@ -101,7 +102,7 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <Navbar />
 
-      <article className="mx-auto max-w-4xl px-4 pb-20 pt-28 md:px-8 md:pt-36">
+      <article className="mx-auto max-w-4xl px-6 pb-24 pt-28 md:px-12 md:pt-36">
         <Link href="/system-design" className="mb-8 inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
           <span aria-hidden="true">←</span> All system designs
         </Link>
@@ -131,7 +132,7 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
           )}
         </div>
 
-        <p className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]/40 p-4 text-sm text-[var(--text-secondary)]">
+        <p className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]/40 p-5 text-sm leading-relaxed text-[var(--text-secondary)]">
           <strong className="text-[var(--text-primary)]">How to read this page. </strong>
           Each step is marked <Badge status="built" /> if it exists in the local build, or <Badge status="design" /> if it is on paper only. The estimates come from the design, not from measurement.
         </p>
@@ -146,7 +147,7 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
         <Section id="estimates" title="Estimates">
           <ul className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Estimates">
             {project.estimates.map(stat => (
-              <li key={stat.label} className="rounded-xl border border-[var(--border)] p-3">
+              <li key={stat.label} className="rounded-xl border border-[var(--border)] p-4">
                 <div className="text-xl font-bold text-[var(--text-primary)] md:text-2xl">{stat.value}</div>
                 <div className="mt-1 text-xs text-[var(--text-secondary)]">{stat.label}</div>
               </li>
@@ -156,9 +157,9 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
         </Section>
 
         <Section id="api" title="API">
-          <div className="space-y-4">
+          <div className="space-y-5">
             {d.api.map(endpoint => (
-              <div key={endpoint.method + endpoint.path} className="rounded-xl border border-[var(--border)] p-5">
+              <div key={endpoint.method + endpoint.path} className="rounded-xl border border-[var(--border)] p-6 md:p-7">
                 <p className="text-lg font-bold text-[var(--text-primary)]">
                   <span className="mr-2 rounded bg-[var(--bg-secondary)] px-2 py-0.5 text-sm">{endpoint.method}</span>
                   {endpoint.path}
@@ -181,7 +182,7 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
         <Section id="data-model" title="Data model">
           <div className="space-y-6">
             {d.dataModel.map(table => (
-              <div key={table.table} className="rounded-xl border border-[var(--border)] p-5">
+              <div key={table.table} className="rounded-xl border border-[var(--border)] p-6 md:p-7">
                 <h3 className="text-lg font-bold text-[var(--text-primary)]">{table.table}</h3>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{table.note}</p>
                 <dl className="mt-4 divide-y divide-[var(--border)]">
@@ -197,10 +198,17 @@ export default function SystemDesignDetailPage({ params }: PageProps) {
           </div>
         </Section>
 
+        {d.diagrams && d.diagrams.length > 0 && (
+          <Section id="diagrams" title="Diagrams">
+            <p className="text-sm text-[var(--text-secondary)]">Tap a diagram to enlarge it.</p>
+            <Gallery images={d.diagrams} />
+          </Section>
+        )}
+
         <Section id="components" title="Components">
-          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Components">
+          <ul className="grid grid-cols-1 gap-5 md:grid-cols-2" aria-label="Components">
             {d.components.map(c => (
-              <li key={c.name} className="rounded-xl border border-[var(--border)] p-5">
+              <li key={c.name} className="rounded-xl border border-[var(--border)] p-6 md:p-7">
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-lg font-bold text-[var(--text-primary)]">{c.name}</h3>
                   <Badge status={c.status} />

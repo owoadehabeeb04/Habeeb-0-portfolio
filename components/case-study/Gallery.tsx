@@ -4,13 +4,17 @@ import { useState } from 'react'
 import Image from 'next/image'
 import type { CaseStudyImage } from '@/types'
 
+const isDiagram = (image: CaseStudyImage) => image.kind === 'diagram'
+const pixelWidth = (image: CaseStudyImage) => image.width ?? (image.kind === 'desktop' ? 1600 : 780)
+const pixelHeight = (image: CaseStudyImage) => image.height ?? (image.kind === 'desktop' ? 1000 : 1688)
+
 export default function Gallery({ images }: { images: CaseStudyImage[] }) {
   const [open, setOpen] = useState<CaseStudyImage | null>(null)
   if (images.length === 0) return null
 
   return (
     <>
-      <div className="my-8 grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className={`my-8 grid gap-4 ${images.every(isDiagram) ? 'grid-cols-1 gap-6 md:grid-cols-2' : 'grid-cols-2 md:grid-cols-3'}`}>
         {images.map(image => (
           <figure key={image.src} className={image.kind === 'desktop' ? 'col-span-2 md:col-span-3' : ''}>
             <button
@@ -21,10 +25,10 @@ export default function Gallery({ images }: { images: CaseStudyImage[] }) {
               <Image
                 src={image.src}
                 alt={image.alt}
-                width={image.kind === 'desktop' ? 1600 : 780}
-                height={image.kind === 'desktop' ? 1000 : 1688}
+                width={pixelWidth(image)}
+                height={pixelHeight(image)}
                 quality={90}
-                sizes={image.kind === 'desktop' ? '(min-width: 1024px) 896px, 100vw' : '(min-width: 1024px) 290px, 50vw'}
+                sizes={isDiagram(image) ? '(min-width: 1024px) 440px, 100vw' : image.kind === 'desktop' ? '(min-width: 1024px) 896px, 100vw' : '(min-width: 1024px) 290px, 50vw'}
                 className="h-auto w-full"
               />
             </button>
@@ -47,8 +51,8 @@ export default function Gallery({ images }: { images: CaseStudyImage[] }) {
           <Image
             src={open.src}
             alt={open.alt}
-            width={open.kind === 'desktop' ? 1600 : 780}
-            height={open.kind === 'desktop' ? 1000 : 1688}
+            width={pixelWidth(open)}
+            height={pixelHeight(open)}
             quality={95}
             sizes="100vw"
             className="max-h-[90vh] w-auto max-w-full object-contain"

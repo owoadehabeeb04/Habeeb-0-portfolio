@@ -107,7 +107,7 @@ export const portfolioChunks = [
     keywords: ['who', 'habeeb', 'about', 'graduate', 'education', 'university', 'contact', 'email', 'phone', 'social', 'links', 'summary', 'location', 'lagos'],
     content: `Habeeb Owoade (Owoade Habeeb Temitope) is a Full-Stack Software Engineer & AI Systems Researcher based in Lagos, Nigeria. He graduated from Bowen University in July 2026 with a B.Sc. in Software Engineering (CGPA 4.71/5.00, Top 1% of his cohort).
 
-    He ships AI-powered SaaS, fintech, insurtech and e-commerce products for real users, working remotely with Nigerian and US-based teams. He builds the parts that make software trustworthy: signed and idempotent webhooks, role-based access control, background job queues, read-only bank connections and AI agents with a human in the loop. He is the author of two published preprints on LLM agent reliability and review-gated AI architecture, and is currently going deep on system design and distributed-systems fundamentals. Research interests: LLM agents and agentic systems, agent reliability and validation, tool-using language models, AI evaluation and benchmarking, and human-in-the-loop AI (see [Research & Publications](/portfolio#research)).
+    He ships AI-powered SaaS, fintech, insurtech and e-commerce products for real users, working remotely with Nigerian and US-based teams. He builds the parts that make software trustworthy: signed and idempotent webhooks, role-based access control, background job queues, read-only bank connections and AI agents with a human in the loop. He is the author of two published preprints on LLM agent reliability and review-gated AI architecture, and is currently going deep on system design and distributed-systems fundamentals (see his Pastebin design at [System Design](/portfolio#system-design)). Research interests: LLM agents and agentic systems, agent reliability and validation, tool-using language models, AI evaluation and benchmarking, and human-in-the-loop AI (see [Research & Publications](/portfolio#research)).
     
     CONTACT:
     - Email: owoadehabeeb04@gmail.com
@@ -265,7 +265,8 @@ export const portfolioChunks = [
     keywords: ['projects', 'built', 'created', 'developed', 'portfolio', 'work', 'show', 'showcase', 'list'],
     content: `## FULLSTACK PROJECTS
 
-### 0. Latest (2026): SEFA, SoundRadar and LUMES
+### 0. Latest (2026): SEFA, SoundRadar, LUMES and Pastebin
+- **Pastebin - System Design** (NestJS, PostgreSQL, Redis, S3, Nginx, Docker Compose, k6): a system design project for 30 million active users across three regions, with one local copy built and run. Built: API, Redis cache and rate limiter, S3 for large pastes, cleanup job, 3 API containers behind Nginx. Design only: CDN, three regions, real sharding, replica promotion. [Full system design](/system-design/pastebin) | [Case study](/projects/pastebin) | [GitHub](https://github.com/owoadehabeeb04/Pastebin-system-design)
 - **SoundRadar - Music Release Radar** (Next.js, NestJS, PostgreSQL, RabbitMQ): a crawling pipeline finds releases on the web, one publish step verifies them, listeners get a drop calendar and push alerts. 2000+ releases and a 2,200-genre catalog. [Read the case study](/projects/soundradar)
 - **SEFA - AI Budgeting App** (React Native, TypeScript, Node.js, SSE, Mono API): read-only bank sync, PDF statement import with duplicate detection, AI finance assistant; published as a preprint.
 - **LUMES - E-commerce Platform** (Next.js, TypeScript, MongoDB, Stripe): storefront plus admin dashboard, NextAuth RBAC, idempotent signed Stripe webhooks, admin-managed refunds, location-based currency, Brevo email.

@@ -2,6 +2,8 @@
 // To add a project: append one object to `systemDesigns` below. The section, the AI knowledge and
 // the tests pick it up automatically. Estimates come from the design, not from measurement.
 
+import type { CaseStudyImage } from '@/types'
+
 export interface SystemDesignProject {
   id: string // used for the section anchor and AI chunk id
   title: string
@@ -37,6 +39,7 @@ export interface SystemDesignDetail {
   expiry: { text: string; status: DesignStatus }[]
   rateLimiting: { text: string; status: DesignStatus }[]
   security: string[] // all design only
+  diagrams?: CaseStudyImage[]
 }
 
 export const pastebinLinks = {
@@ -50,7 +53,15 @@ export const systemDesignHeadline =
   'Designing for scale on paper, then building one local copy to test the ideas. Each entry says what is built and what is design only.'
 
 
+export const pastebinDiagrams: CaseStudyImage[] = [
+  { src: '/images/case-studies/pastebin/architecture.webp', alt: 'Pastebin architecture: CDN edges in three regions, Nginx load balancers, NestJS app servers, Redis, PostgreSQL shards with replicas, and S3', caption: 'Architecture. This is the full design, including the CDN, regions and shards that are not built locally.', kind: 'diagram', width: 1600, height: 2719 },
+  { src: '/images/case-studies/pastebin/write-path.webp', alt: 'Sequence diagram of creating a paste', caption: 'Write path: create a paste.', kind: 'diagram', width: 1600, height: 2398 },
+  { src: '/images/case-studies/pastebin/read-path.webp', alt: 'Sequence diagram of reading a paste through the CDN, Redis, PostgreSQL replica and S3', caption: 'Read path: open a link. The CDN step is design only.', kind: 'diagram', width: 1600, height: 1954 },
+  { src: '/images/case-studies/pastebin/data-model.webp', alt: 'Data model diagram of the pastes and users tables', caption: 'Data model: pastes and users.', kind: 'diagram', width: 1215, height: 1410 },
+]
+
 const pastebinDetail: SystemDesignDetail = {
+  diagrams: pastebinDiagrams,
   requirements: {
     functional: [
       'Create a paste: paste plain text or code and get a short link.',
