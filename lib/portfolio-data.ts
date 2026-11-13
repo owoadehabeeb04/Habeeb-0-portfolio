@@ -1,6 +1,8 @@
 // Portfolio knowledge base - chunked for RAG retrieval
 import { caseStudies } from '@/content/case-studies'
 import type { CaseStudy } from '@/types'
+import { systemDesigns } from '@/content/system-design'
+import { academicCv, evidenceBoundaries, publications, researchInterests, researchRoles, selectedProjects } from '@/content/research'
 
 // One knowledge chunk per case study, built from the same data as the case-study pages so the site and the chatbot never disagree
 const caseStudyChunk = (study: CaseStudy) => ({
@@ -23,13 +25,89 @@ ${study.decisions.map(d => `    - ${d.title}: ${d.choice} (Trade-off: ${d.tradeo
     Read the full write-up with diagrams: [${study.title} case study](/projects/${study.slug})`,
 })
 
+
+// Research chunks are built from the same data as the Research section, so the site and the chatbot never disagree
+const researchLinks = `[Research & Publications](/portfolio#research) | [${academicCv.label}](${academicCv.url})`
+
+const researchChunks = [
+  {
+    id: 'research_publications',
+    keywords: ['research', 'researcher', 'preprint', 'preprints', 'publication', 'publications', 'published', 'paper', 'papers', 'zenodo', 'revalidation', 'action-dependency', 'precision', 'recall', 'academic', 'doi'],
+    content: `PUBLICATIONS (two preprints on Zenodo, both 2026):
+${publications
+  .map(
+    (pub, i) => `    ${i + 1}. ${pub.title}. ${pub.venue}. doi:${pub.doi} - [Read the preprint](${pub.url})
+       ${pub.summary}
+       Key results: ${pub.findings.map(f => `${f.value} ${f.label}`).join('; ')}`
+  )
+  .join('\n')}
+    ${researchLinks}`,
+  },
+  {
+    id: 'research_experience',
+    keywords: ['research', 'researcher', 'independent researcher', 'undergraduate researcher', 'benchmark', 'benchmarks', 'evaluation', 'experiment', 'replay', 'evidence', 'boundaries', 'findings', 'results', 'final-year', 'thesis', 'academic'],
+    content: `RESEARCH EXPERIENCE:
+${researchRoles
+  .map(role => `    ${role.title} (${role.period}) - ${role.focus}\n${role.bullets.map(b => `    - ${b}`).join('\n')}`)
+  .join('\n\n')}
+    EVIDENCE BOUNDARIES: ${evidenceBoundaries}
+    ${researchLinks}`,
+  },
+  {
+    id: 'research_interests',
+    keywords: ['research interests', 'interested in', 'interests', 'agentic', 'agents', 'reliability', 'human-in-the-loop', 'long-horizon', 'academic', 'phd', 'graduate school', 'research areas', 'research focus'],
+    content: `RESEARCH INTERESTS: ${researchInterests.join('; ')}.
+    Habeeb is an AI systems researcher: he studies how tool-using LLM agents fail and how to make consequential actions verifiably safer, and builds the evaluation harnesses to measure it.
+    ${researchLinks}`,
+  },
+  {
+    id: 'research_expo',
+    keywords: ['expo', 'meeting', 'conversation', 'conversations', 'live conversation', 'deepgram', 'electron', 'transcription', 'context-aware', 'ai systems project', 'selected projects'],
+    content: `SELECTED AI SYSTEMS PROJECT:
+${selectedProjects
+  .map(p => `    ${p.title} - ${p.tagline}. Stack: ${p.stack.join(', ')}\n${p.bullets.map(b => `    - ${b}`).join('\n')}`)
+  .join('\n')}
+    ${researchLinks}`,
+  },
+]
+
+// System design chunks, one per project, built from the same data as the System Design section
+const systemDesignChunks = systemDesigns.map(project => ({
+  id: `system_design_${project.id}`,
+  keywords: ['system design', 'distributed', 'sharding', 'scalability', 'estimates', 'load balancer', ...(project.keywords ?? [])].filter(k => k.length >= 4),
+  content: `SYSTEM DESIGN PROJECT: ${project.title} - ${project.tagline}
+    ${project.summary}
+    STACK: ${project.stack.join(', ')}
+    BUILT AND RUN LOCALLY: ${project.built.join('; ')}.
+    DESIGN ONLY (NOT BUILT): ${project.designOnly.join('; ')}.
+    ESTIMATES (from the design, not measured): ${project.estimates.map(e => `${e.value} ${e.label}`).join('; ')}.
+    ${project.detail ? `REQUIREMENTS: ${[...project.detail.requirements.functional, ...project.detail.requirements.nonFunctional].join(' ')}
+    SHORT CODES: ${project.detail.shortCodes.join(' ')}
+    DATA MODEL: ${project.detail.dataModel.map(t => `${t.table}(${t.fields.map(f => f.name).join(', ')})`).join('; ')}
+    API: ${project.detail.api.map(a => `${a.method} ${a.path}: ${a.description}`).join(' ')}
+    COMPONENTS: ${project.detail.components.map(c => `${c.name} [${c.status === 'built' ? 'built' : 'design only'}]: ${c.description}`).join(' ')}
+    WRITE PATH: ${project.detail.writePath.map((s, i) => `${i + 1}. ${s.step}`).join(' ')}
+    READ PATH: ${project.detail.readPath.map((s, i) => `${i + 1}. ${s.step}`).join(' ')}
+    EXPIRY: ${project.detail.expiry.map(e => e.text).join(' ')}
+    RATE LIMITING: ${project.detail.rateLimiting.map(e => e.text).join(' ')}
+    SECURITY (design only): ${project.detail.security.join(' ')}` : ''}
+    No load-test results are published, so do not claim performance numbers or how many users it handles.
+    Links: ${[
+      project.links.detail && `[${project.title} full system design](${project.links.detail})`,
+      project.links.caseStudy && `[${project.title} case study](${project.links.caseStudy})`,
+      project.links.repo && `[GitHub](${project.links.repo})`,
+      project.links.writeUp && `[Design write-up](${project.links.writeUp})`,
+      '[System Design section](/portfolio#system-design)',
+    ].filter(Boolean).join(' | ')}`,
+}))
+
 export const portfolioChunks = [
   {
     id: 'bio',
     keywords: ['who', 'habeeb', 'about', 'graduate', 'education', 'university', 'contact', 'email', 'phone', 'social', 'links', 'summary', 'location', 'lagos'],
     content: `Habeeb Owoade (Owoade Habeeb Temitope) is a Full-Stack Software Engineer & AI Systems Researcher based in Lagos, Nigeria. He graduated from Bowen University in July 2026 with a B.Sc. in Software Engineering (CGPA 4.71/5.00, Top 1% of his cohort).
 
-    He ships AI-powered SaaS, fintech, insurtech and e-commerce products for real users, working remotely with Nigerian and US-based teams. He builds the parts that make software trustworthy: signed and idempotent webhooks, role-based access control, background job queues, read-only bank connections and AI agents with a human in the loop. He is the author of two published preprints on LLM agent reliability and review-gated AI architecture, and is currently going deep on system design and distributed-systems fundamentals.
+    He ships AI-powered SaaS, fintech, insurtech and e-commerce products for real users, working remotely with Nigerian and US-based teams. He builds the parts that make software trustworthy: signed and idempotent webhooks, role-based access control, background job queues, read-only bank connections and AI agents with a human in the loop. He is the author of two published preprints on LLM agent reliability and review-gated AI architecture, and is currently going deep on system design and distributed-systems fundamentals. Research interests: LLM agents and agentic systems, agent reliability and validation, tool-using language models, AI evaluation and benchmarking, and human-in-the-loop AI (see [Research & Publications](/portfolio#research)).
     
     CONTACT:
     - Email: owoadehabeeb04@gmail.com
@@ -50,20 +128,6 @@ export const portfolioChunks = [
     - Built human-in-the-loop validation, benchmarking and calibration workflows that keep criterion-level decisions, raising exact-match scorer agreement by 27% (AI and human reviewers often disagreed)
     - Shipped performance dashboards, reviewer workflows, audit history and reporting in Next.js, giving managers a traceable record of every review decision
     - Set up CI/CD with GitHub Actions deploying to AWS so every merge ships automatically`
-  },
-  {
-    id: 'research',
-    keywords: ['research', 'researcher', 'preprint', 'preprints', 'publication', 'publications', 'paper', 'papers', 'zenodo', 'llm', 'agent', 'reliability', 'revalidation', 'benchmark', 'sefa', 'doi', 'published', 'academic'],
-    content: `RESEARCH & PUBLICATIONS (Habeeb is a published AI systems researcher):
-    
-    PREPRINTS:
-    1. Owoade, H. T. (2026). Automatic Action-Dependency Inference for Selective Revalidation of Tool-Using LLM Agents. Preprint, Version 1. Zenodo. doi:10.5281/zenodo.23363804 - [Read it](https://doi.org/10.5281/zenodo.23363804)
-    2. Owoade, H. T. (2026). SEFA: A Review-Gated Architecture for AI-Assisted Financial Budgeting and Expense Intelligence. Preprint, Version 2. Zenodo. doi:10.5281/zenodo.22881415 - [Read it](https://doi.org/10.5281/zenodo.22881415)
-    
-    INDEPENDENT RESEARCHER (2026) - LLM Agent Reliability and Selective Revalidation:
-    - Studied whether tool-using LLM agents can infer the state dependencies behind consequential actions and revalidate only those under environment drift, using a deterministic refund benchmark (36 action-bearing captures, 144 matched replay branches)
-    - Achieved 0.9385 F1 (1.0000 recall) for action-dependency inference; LLM-selective revalidation prevented 22/22 observed unsafe actions and cut revalidation reads by 36.9% versus the full-state baseline
-    - Built the pipeline with TypeScript, LangGraph, MCP, PostgreSQL and RabbitMQ, with deterministic replay and automated evaluation`
   },
   {
     id: 'sefa',
@@ -371,6 +435,8 @@ export const portfolioChunks = [
     
     TECH STACK: Next.js, TypeScript, Firebase`
   },
+  ...researchChunks,
+  ...systemDesignChunks,
   ...caseStudies.map(caseStudyChunk),
 ]
 

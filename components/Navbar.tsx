@@ -41,7 +41,7 @@ export default function Navbar({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
       
-      const sections = ['home', 'projects', 'aboutme', 'contact']
+      const sections = ['home', 'projects', 'research', 'system-design', 'aboutme', 'contact']
       const scrollPosition = window.scrollY + 100
 
       for (const section of sections) {
@@ -73,14 +73,14 @@ export default function Navbar({
         } ${isNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
         style={navStyle}
       >
-        <div className="navbar-container flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2.5 md:py-3 
+        <div className="navbar-container flex items-center gap-1 lg:gap-1.5 xl:gap-4 px-2 lg:px-3 xl:px-6 py-2.5 md:py-3 
         bg-gradient-to-r from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] 
         backdrop-blur-md border border-[var(--border)]/40 rounded-full shadow-lg shadow-[var(--border)]/10 
         hover:shadow-[var(--border)]/20 transition-all duration-300">
           <a
             href={getNavLink('projects')}
             onClick={() => handleNavClick('projects')}
-            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               activeNav === 'projects' 
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
@@ -92,7 +92,7 @@ export default function Navbar({
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.12s' }}>|</span>
           <Link
             href="/case-studies"
-            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               isCaseStudyPage
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
@@ -101,12 +101,38 @@ export default function Navbar({
           >
             Case Studies
           </Link>
+          <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.145s' }}>|</span>
+          <a
+            href={getNavLink('research')}
+            onClick={() => handleNavClick('research')}
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+              activeNav === 'research'
+                ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+            }`}
+            style={{ animationDelay: '0.147s' }}
+          >
+            Research
+          </a>
+          <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
+          <a
+            href={getNavLink('system-design')}
+            onClick={() => handleNavClick('system-design')}
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+              activeNav === 'system-design'
+                ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+            }`}
+            style={{ animationDelay: '0.1485s' }}
+          >
+            <span className="xl:hidden">Design</span><span className="hidden xl:inline">System Design</span>
+          </a>
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
           <a
             href="/Habeeb-Owoade-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105 transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade"
+            className="nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105 transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade"
             style={{ animationDelay: '0.2s' }}
           >
             Resume
@@ -115,7 +141,7 @@ export default function Navbar({
           <a
             href={getNavLink('aboutme')}
             onClick={() => handleNavClick('aboutme')}
-            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               activeNav === 'aboutme' 
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
@@ -128,7 +154,7 @@ export default function Navbar({
           <a
             href={getNavLink('contact')}
             onClick={() => handleNavClick('contact')}
-            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               activeNav === 'contact' 
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
@@ -140,7 +166,7 @@ export default function Navbar({
           <span className={`text-[var(--text-secondary)]/30 nav-item-fade`} style={{ animationDelay: '0.45s' }}>|</span>
           <Link
             href="/"
-            className={`nav-link px-2 md:px-3 py-1 text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
+            className={`nav-link px-1 lg:px-1.5 xl:px-3 py-1 text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap rounded-lg nav-item-fade ${
               activeNav === 'ask-habeeb' 
                 ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105' 
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
@@ -222,6 +248,32 @@ export default function Navbar({
             >
               Case Studies
             </Link>
+            <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.145s' }}>|</span>
+            <a
+              href={getNavLink('research')}
+              onClick={() => handleNavClick('research')}
+              className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${
+                activeNav === 'research'
+                  ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+              }`}
+              style={{ animationDelay: '0.147s' }}
+            >
+              Research
+            </a>
+            <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
+            <a
+              href={getNavLink('system-design')}
+              onClick={() => handleNavClick('system-design')}
+              className={`nav-link px-2 py-1 text-xs font-medium transition-all duration-300 whitespace-nowrap rounded-lg flex-shrink-0 nav-item-fade ${
+                activeNav === 'system-design'
+                  ? 'text-[var(--text-primary)] bg-[var(--bg-primary)]/30 scale-105'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]/20 hover:scale-105'
+              }`}
+              style={{ animationDelay: '0.1485s' }}
+            >
+              System Design
+            </a>
             <span className={`text-[var(--text-secondary)]/30 flex-shrink-0 nav-item-fade`} style={{ animationDelay: '0.15s' }}>|</span>
             <a
               href="/Habeeb-Owoade-CV.pdf"

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { caseStudies } from '@/content/case-studies'
+import { systemDesigns } from '@/content/system-design'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://habeeb-dev-portfolio.vercel.app'
@@ -47,6 +48,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...routes, ...caseStudyRoutes]
+  const systemDesignRoutes = [
+    { url: `${baseUrl}/system-design`, lastModified: currentDate, changeFrequency: 'weekly' as const, priority: 0.8 },
+    ...systemDesigns
+      .filter(project => project.detail)
+      .map(project => ({
+        url: `${baseUrl}/system-design/${project.id}`,
+        lastModified: currentDate,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      })),
+  ]
+
+  return [...routes, ...caseStudyRoutes, ...systemDesignRoutes]
 }
 

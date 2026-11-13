@@ -5,9 +5,12 @@ import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Skills from '@/components/Skills'
 import Projects from '@/components/Projects'
+import Research from '@/components/Research'
+import SystemDesign from '@/components/SystemDesign'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
-import { generateMetadata as generateSEOMetadata, profilePageSchema } from '@/lib/seo'
+import { generateMetadata as generateSEOMetadata, profilePageSchema, generateScholarlyArticleSchema } from '@/lib/seo'
+import { publications } from '@/content/research'
 
 
 
@@ -35,10 +38,20 @@ export default function PortfolioPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageSchema) }}
       />
+      {/* Structured Data - the two preprints */}
+      {publications.map(pub => (
+        <script
+          key={pub.slug}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateScholarlyArticleSchema(pub)) }}
+        />
+      ))}
       <main className="min-h-screen">
         <Navbar />
         <Hero />
         <Projects />
+        <Research />
+        <SystemDesign />
         <About />
         <Experience />
         <Skills />

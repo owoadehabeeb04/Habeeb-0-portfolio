@@ -6,8 +6,9 @@ import { recipia } from './recipia'
 import { omoAi } from './omo-ai'
 import { devLink } from './dev-link'
 import { tobiPortfolio } from './tobi-portfolio'
+import { pastebin } from './pastebin'
 
-export const caseStudies: CaseStudy[] = [sefa, soundradar, lumes, recipia, omoAi, devLink, tobiPortfolio]
+export const caseStudies: CaseStudy[] = [sefa, soundradar, lumes, recipia, omoAi, devLink, tobiPortfolio, pastebin]
 
 export const getCaseStudy = (slug: string) => caseStudies.find(study => study.slug === slug)
 

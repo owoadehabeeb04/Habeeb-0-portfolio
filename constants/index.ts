@@ -257,6 +257,23 @@ export const fullstackProjects: Project[] = [
     sourceCode: 'https://github.com/owoadehabeeb04/ace-store',
   },
 
+  {
+    title: 'Pastebin - System Design',
+    slug: 'pastebin',
+    image: '/images/case-studies/pastebin/hero.webp',
+    alt: 'Pastebin system design: clients, Nginx, API servers, Redis, PostgreSQL and S3',
+    liveUrl: 'https://github.com/owoadehabeeb04/Pastebin-system-design',
+    category: 'Fullstack',
+    tags: ['Fullstack', 'System Design'],
+    description: 'A system design project. Paste text or code, get a short link, read it until it expires. Designed for 30 million active users across three regions, then built and run as one local copy with caching, rate limiting and tests.',
+    techStack: [
+      { name: 'TypeScript', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', external: true },
+      { name: 'NestJS', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg', external: true },
+      { name: 'PostgreSQL', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', external: true },
+      { name: 'Redis', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', external: true },
+      { name: 'Docker', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', external: true },
+    ],
+  },
 ]
 
 export const frontendProjects: Project[] = [
